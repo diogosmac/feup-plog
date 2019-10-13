@@ -4,8 +4,6 @@
 % TabIn - Tabuleiro input, antes de a peça ser jogada
 % TabOut - Tabuleiro output, retornado depois de a peça ter sido colocada na posiçao
 
-% ATENCAO: TALVEZ QUEIRA ISTO AO CONTRARIO (ATLINHA A ACABAR EM 7 EM VEZ DE 1)
-
 jogaPeca(Linha, Coluna, Peca, TabIn, TabOut) :-
     atualizaLinha(Linha, Coluna, Peca, TabIn, TabOut).
 
@@ -31,8 +29,6 @@ atualizaColuna(N, Peca, [P | Resto], [P | Mais]) :-
 % Tab - Estado do tabuleiro atual
 % Peca - Peca que e retonada pelo predicado
 
-% ATENCAO: TALVEZ QUEIRA ISTO AO CONTRARIO (ANLINHA A ACABAR EM 7 EM VEZ DE 1)
-
 analisaPecaEmPosicao(Linha, Coluna, Tab, Peca) :-
     analisaLinha(Linha, Coluna, Tab, Peca).
 
@@ -50,4 +46,3 @@ analisaColuna(N, [P | Resto], Peca) :-
     N > 1,
     Next is N - 1,
     analisaColuna(Next, Resto, Peca).
-    
