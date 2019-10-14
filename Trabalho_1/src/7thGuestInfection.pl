@@ -4,27 +4,12 @@
 :- consult('utility.pl').
 :- use_module(library(lists)).
 
-% ---------------------------------------------------------------------
-
-% cell(x, y, peca).
-% atualizaCelula(X, Y, NewX, NewY, Peca) :-
-%     retract(cell(X,Y,Peca)).
-%     assertz(cell(NewX,NewY,Peca)).
-% possível mas lento (also feio, not sexy)
-
-% ---------------------------------------------------------------------
-
-% format aka printf
-% format(".. | ~p | ~d | .... | ~n", [el1, el2, ...]).
-
-% ---------------------------------------------------------------------
-
-joga :-
-    inicializa,
+play :-
+    initializeGame,
     repeat,             % até ter sucesso (fimDeJogo)
-        joga,
-        fimDeJogo,
-    mostraVencedor.
+        makeMove,
+        endOfGame,
+    showWinner.
 
 repeat.
 repeat :-

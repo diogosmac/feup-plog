@@ -1,42 +1,87 @@
 :- consult('utility.pl').
+:- consult('boardManip.pl').
 
-le(Prompt, Texto) :-
-    write(Prompt), write('>'),
-    get0(Ch),
-    leResto(Ch, ListaChars),
-    name(Texto, ListaChars).
+% le(Prompt, Texto) :-
+%     write(Prompt), write('>'),
+%     get0(Ch),
+%     leResto(Ch, ListaChars),
+%     name(Texto, ListaChars).
 
-leResto(10,[]).
-leResto(13,[]).
-leResto(Ch, [Ch | Mais]) :-
-    get0(Ch1),
-    leResto(Ch1, Mais).
+% leResto(10,[]).
+% leResto(13,[]).
+% leResto(Ch, [Ch | Mais]) :-
+%     get0(Ch1),
+%     leResto(Ch1, Mais).
 
 % ---------------------------------------------------------------------
 
-leInt(Prompt, Numero) :-
+readInt(Prompt, Number) :-
     write(Prompt), write('> '),
-    read(Numero).
+    read(Number).
 
 % ---------------------------------------------------------------------
 % Predicado que pede uma linha e coluna (entre 1 e 7) ao utilizador.
-% Linha e Coluna sao ambos retornados pelo predicado
+% Line e Column sao ambos retornados pelo predicado
 
-pedeLinhaEColuna(Linha, Coluna) :-
-    leInt('Insira o numero de uma linha (1 a 7) ', InLinha),
-    leInt('Insira o numero de uma coluna (1 a 7) ', InColuna),
-    verificaLinhaEColuna(InLinha, InColuna, Linha, Coluna).
+askLineAndColumn(Line, Column) :-
+    readInt('Insert the number of a line (1 to 7) ', LineIn),
+    readInt('Insert the number of a column (1 to 7) ', ColumnIn),
+    verifyLineAndColumn(LineIn, ColumnIn, Line, Column).
 
 % feito de modo a que os ultimos dois argumentos sejam iguais a inputs validos;
 % os primeiros dois sao os inputs que o utilizador da.
 
-verificaLinhaEColuna(InLinha, InColuna, InLinha, InColuna) :-
-    InLinha > 0, InLinha < 8,
-    InColuna > 0, InColuna < 8.
+verifyLineAndColumn(LineIn, ColumnIn, LineIn, ColumnIn) :-
+    LineIn > 0, LineIn < 8,
+    ColumnIn > 0, ColumnIn < 8.
 
-verificaLinhaEColuna(InLinha, InColuna, Linha, Coluna) :-
-    format("~n~nInputs invalidos. Por favor, tente de novo.~n~n", []),
-    leInt('Insira o numero de uma linha (1 a 7) ', NewLinha),
-    leInt('Insira o numero de uma coluna (1 a 7) ', NewColuna),
-    verificaLinhaEColuna(NewLinha, NewColuna, Linha, Coluna).
+verifyLineAndColumn(LineIn, ColumnIn, Line, Column) :-
+    format("~n~nInvalid inputs. Please, try again.~n~n", []),
+    readInt('Insert the number of a line (1 to 7) ', NewLineIn),
+    readInt('Insert the number of a column (1 to 7) ', NewColumnIn),
+    verifyLineAndColumn(NewLineIn, NewColumnIn, Line, Column).
 
+% ---------------------------------------------------------------------
+% Predicado que pede, a um determinado jogador, que escolha um seu microbio,
+% numa determianda linha e coluna, de modo a ser movimentado. Inputs invalidos
+% sao verificados.
+
+askMicrobeSelect(Player, Board, Line, Column) :-
+    format("Player ~p, please select a microbe to move.~n~n", [Player]),
+    askLineAndColumn(LineIn, ColumnIn),
+    verifyMicrobeSelect(Player, Board, LineIn, ColumnIn, Line, Column).
+
+verifyMicrobeSelect(Player, Board, LineIn, ColumnIn, LineIn, ColumnIn) :-
+    getMicrobeType(Player, MicrobeType),
+    returnMicrobeInPos(LineIn, ColumnIn, Board, Microbe),
+    Microbe = MicrobeType.
+
+verifyMicrobeSelect(Player, Board, LineIn, ColumnIn, Line, Column) :-
+    format("~n~nPlayer ~p has no microbes in that position. Please, try again.~n~n", [Player]),
+    format("Player ~p, please select a microbe to move.~n~n", [Player]),
+    askLineAndColumn(NewLineIn, NewColumnIn),
+    verifyMicrobeSelect(Player, Board, NewLineIn, NewColumnIn, Line, Column).
+
+
+% ---------------------------------------------------------------------
+% Predicado que pede (a seguir a escolher um microbio) que se escolha uma nova posicao para o mesmo.
+% Inputs invalidos sao verificados.
+
+askMicrobeMovement(Board, OldLine, OldColumn, Line, Column) :-
+    format("Please select a new position for that microbe.~n~n", []),
+    askLineAndColumn(LineIn, ColumnIn),
+    verifyMicrobeMovement(Board, OldLine, OldColumn, LineIn, ColumnIn, Line, Column).
+
+verifyMicrobeMovement(Board, OldLine, OldColumn, LineIn, ColumnIn, LineIn, ColumnIn) :-
+    checkValidMove(OldLine, OldColumn, LineIn, ColumnIn), % TO DO: fazer esta funcao
+    LineDif is OldLine - LineIn,
+    ColDif is OldColumn - ColumnIn,
+    abs(LineDif) < 3, abs(ColDif) < 3,
+    returnMicrobeInPos(LineIn, ColumnIn, Board, Microbe),
+    Microbe = ' '.
+
+verifyMicrobeMovement(Board, OldLine, OldColumn, LineIn, ColumnIn, Line, Column) :-
+    format("~n~nInvalid position. Please, try again.~n~n", []),
+    format("Please select a new position for that microbe.~n~n", []),
+    askLineAndColumn(NewLineIn, NewColumnIn),
+    verifyMicrobeMovement(Board, OldLine, OldColumn, NewLineIn, NewColumnIn, Line, Column).
