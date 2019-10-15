@@ -1,9 +1,7 @@
 
-getMicrobeType('A', Microbe) :-
-    Microbe = a.
+getMicrobeType('A', a).
 
-getMicrobeType('B', Microbe) :-
-    Microbe = b.
+getMicrobeType('B', b).
 
 checkValidMove(OldLine, OldColumn, NewLine, NewColumn) :-
     % TO DO: fazer este predicado

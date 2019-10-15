@@ -42,6 +42,11 @@ verifyLineAndColumn(LineIn, ColumnIn, Line, Column) :-
     verifyLineAndColumn(NewLineIn, NewColumnIn, Line, Column).
 
 % ---------------------------------------------------------------------
+% ---------------------FUNCOES EM BAIXO NAO SEI SE IRAO SER UTILIZADAS ----------------------------------------
+
+
+
+
 % Predicado que pede, a um determinado jogador, que escolha um seu microbio,
 % numa determianda linha e coluna, de modo a ser movimentado. Inputs invalidos
 % sao verificados.
