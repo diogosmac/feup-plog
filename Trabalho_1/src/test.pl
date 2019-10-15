@@ -2,20 +2,20 @@
 :- consult('print.pl').
 :- consult('boardManip.pl').
 :- consult('utility.pl').
+:- consult('logic.pl').
 :- use_module(library(lists)).
 
-tabuleiroTeste([[' ', a, b, ' ', a, ' ', ' '],
-           [' ', ' ', b, ' ', ' ', ' ', ' '],
-           [' ', ' ', b, ' ', ' ', ' ', ' '],
+tabuleiroTeste([[' ', a, a, ' ', a, ' ', ' '],
+           [' ', ' ', a, ' ', ' ', ' ', ' '],
+           [' ', ' ', a, ' ', ' ', ' ', ' '],
            [' ', a, ' ', a, a, ' ', ' '],
-           [' ', ' ', b, ' ', b, ' ', ' '],
-           [' ', ' ', b, ' ', ' ', ' ', ' '],
-           [' ', ' ', b, ' ', a, ' ', ' ']
+           [' ', ' ', a, ' ', a, ' ', ' '],
+           [' ', ' ', a, ' ', ' ', ' ', ' '],
+           [' ', ' ', a, ' ', a, ' ', ' ']
           ]).
 
 % ---------------------------------------------------------------------
 % funcoes de teste
-:- consult('print.pl').
 
 jogaPecaTest(Linha, Coluna, Peca):-
     tabuleiro(Tab),
@@ -60,3 +60,9 @@ testAskMicrobeMovement :-
     display_game(Board, 'A'),
     askMicrobeMovement(Board, 4, 2, Line, Column),
     format("~n~nLinha: ~p; Coluna: ~p", [Line, Column]).
+
+testEndGame :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    game_over(Board, Winner),
+    format("~p ~n", [Winner]).
