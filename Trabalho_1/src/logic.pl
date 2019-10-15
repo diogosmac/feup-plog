@@ -14,8 +14,7 @@ move(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard) :-
 handleIsAdjacent('no', OldLine, OldColumn, BoardIn, BoardOut) :-
     playMicrobe(OldLine, OldColumn, ' ', BoardIn, BoardOut).
 
-handleIsAdjacent('yes', OldLine, OldColumn, BoardIn, BoardOut) :-
-    BoardOut = BoardIn.
+handleIsAdjacent('yes', OldLine, OldColumn, Board, Board).
 
 % ---------------------------------------------------------------------
 

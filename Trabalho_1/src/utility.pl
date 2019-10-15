@@ -20,7 +20,7 @@ checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdj
 % verifica se a posicao inicial ("antiga") contem um microbio do jogador,
 % e verifica se a posicao final ("nova") esta livre.
 
-verifyMicrobeSelect(MicrobeType, Board, OldLine, OldColumn, NewLine, NewColumn) :-
+verifyMicrobePositions(MicrobeType, Board, OldLine, OldColumn, NewLine, NewColumn) :-
     returnMicrobeInPos(OldLine, OldColumn, Board, Microbe1),
     Microbe1 = MicrobeType,
     returnMicrobeInPos(NewLine, NewColumn, Board, Microbe2),

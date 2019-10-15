@@ -83,7 +83,7 @@ playMicrobe(Line, Column, Microbe, BoardIn, BoardOut) :-
 updateLine(1, Column, Microbe, [Line | More], [NewLine | More]) :-
     updateColumn(Column, Microbe, Line, NewLine).
 
-updateLine(N, Column, Microbe, [Line | More], [NewLine | MoreLines]) :-
+updateLine(N, Column, Microbe, [Line | More], [Line | MoreLines]) :-
     N > 1,
     Next is N-1,
     updateLine(Next, Column, Microbe, More, MoreLines).

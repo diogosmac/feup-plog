@@ -45,12 +45,13 @@ verifyLineAndColumn(LineIn, ColumnIn, Line, Column) :-
 % predicado que pergunta ao jogador que move e que ele pretende fazer.
 % OldLine e OldColumn referem-se a posicao onde esta o microbio que se pretende mexer.
 % NewLine e NewColumn referem-se a posicao para onde esse microbio deve ir.
-askPlayerMove(OldLine, OldColumn, NewLine, NewColumn) :-
+askPlayerMove(Player, OldLine, OldColumn, NewLine, NewColumn) :-
     format("Player ~p, please select a microbe to move.~n~n", [Player]),
     askLineAndColumn(OldLine, OldColumn),
-    format("Please select a new position for that microbe.~n~n", []),
-    askLineAndColumn(NewLine, NewColumn).
-
+    format("~n~nPlease select a new position for that microbe.~n~n", []),
+    askLineAndColumn(NewLine, NewColumn),
+    format("~n~n", []).
+    
 % ---------------------------------------------------------------------
 % ---------------------FUNCOES EM BAIXO NAO SEI SE IRAO SER UTILIZADAS ----------------------------------------
 

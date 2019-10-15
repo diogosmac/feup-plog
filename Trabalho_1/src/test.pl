@@ -19,7 +19,7 @@ tabuleiroTeste([[' ', a, b, ' ', a, ' ', ' '],
 :- consult('print.pl').
 
 jogaPecaTest(Linha, Coluna, Peca):-
-    tabuleiro(Tab),
+    tabuleiroTeste(Tab),
     format("Antes:~n~n~n", []),
     display_game(Tab, 'A'),
     format("~n~n~n", []),
@@ -30,10 +30,10 @@ jogaPecaTest(Linha, Coluna, Peca):-
 
 
 analisaPecaTest(Linha, Coluna):-
-    tabuleiro(Tab),
+    tabuleiroTeste(Tab),
+    returnMicrobeInPos(Linha, Coluna, Tab, Peca),
     display_game(Tab, 'A'),
     format("~n~n~n", []),
-    returnMicrobeInPos(2, 3, Tab, Peca),
     format("A peca na posicao e ~p.", [Peca]).
 
 
@@ -74,3 +74,11 @@ testUpdatePoints :-
     format("~n~n", []),
     updatePointsNewBoard(Board),
     display_game(Board, 'A').
+
+testMove :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    askPlayerMove('A', OldLine, OldColumn, NewLine, NewColumn),
+    move('A', OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard),
+    format("~n~n", []),
+    display_game(NewBoard, 'B').
