@@ -2,7 +2,20 @@
 :- consult('boardManip.pl').
 
 % validacao e execucao de uma jogada proposta; modifica o Board passado e retorna em NewBoard
-% move(OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard) :-
+% OldLine e OldColumn referem-se a posicao onde esta o microbio que se pretende mexer.
+% NewLine e NewColumn referem-se a posicao para onde esse microbio deve ir.
+% O Player tambem e passado, de modo a saber-se qual o tipo de microbio que o jogador deve mover.
+move(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard) :-
+    getMicrobeType(Player, MicrobeType),
+    checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdjacent),
+    playMicrobe(NewLine, NewColumn, MicrobeType, Board, BoardOut),
+    handleIsAdjacent(IsAdjacent, OldLine, OldColumn, BoardOut, NewBoard).
+
+handleIsAdjacent('no', OldLine, OldColumn, BoardIn, BoardOut) :-
+    playMicrobe(OldLine, OldColumn, ' ', BoardIn, BoardOut).
+
+handleIsAdjacent('yes', OldLine, OldColumn, BoardIn, BoardOut) :-
+    BoardOut = BoardIn.
 
 % ---------------------------------------------------------------------
 

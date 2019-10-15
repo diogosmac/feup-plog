@@ -67,3 +67,10 @@ testEndGame :-
     display_game(Board, 'A'),
     game_over(Board, Winner),
     format("~p ~n", [Winner]).
+
+testUpdatePoints :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    format("~n~n", []),
+    updatePointsNewBoard(Board),
+    display_game(Board, 'A').
