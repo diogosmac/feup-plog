@@ -21,37 +21,46 @@
 % - o tabuleiro esta completamente preenchido
 
 game_over(Board, Winner) :-
-    (
-        (
-            getMicrobeType('B', MicrobeB),
-            boardEndCheck(MicrobeB, Board)
-        );
-        (
-            getMicrobeType('A', MicrobeA),
-            boardEndCheck(MicrobeA, Board)
-        );
-        boardEndCheck(' ', Board)
-    ),
-    declareWinner(Winner).
+    ((getMicrobeType('B', MicrobeB),
+      boardEndCheck(MicrobeB, Board));
 
-declareWinner(Winner) :-
-    PointsA(A), 
-    PointsA(B),
-    (A > B,
-    Winner is 'A');
-    (B > A,
-    Winner is 'B');
-    Winner is 'draw'.
+     (getMicrobeType('A', MicrobeA),
+      boardEndCheck(MicrobeA, Board));
 
-boardEndCheck(P, []).
+      boardEndCheck(' ', Board)),
+     
+      pointsA(A),
+      pointsB(B),
+      declareWinner(A, B, Winner).
+
+% predicado que mostra o vencedor do jogo, tendo em conta os pontos de cada um
+
+declareWinner(A, B, Winner) :-
+    A > B,
+    Winner = 'A'.
+
+declareWinner(A, B, Winner) :-
+    B > A,
+    Winner = 'B'.
+
+declareWinner(A, B, Winner) :-
+    A =:= B,
+    Winner = 'draw'.
+
+
+% predicado que apenas e verdadeiro se o tabuleiro nao contem em lado nenhum a peca P.
+
+boardEndCheck(_, []).
 
 boardEndCheck(P, [Line | Rest]) :-
     boardLineEndCheck(P, Line),
     boardEndCheck(P, Rest).
 
-boardLineEndCheck(P, []).
+boardLineEndCheck(_, []).
 
 boardLineEndCheck(P, [Head | Tail]) :-
     Head \= P,
     boardLineEndCheck(P, Tail).
+
+% ---------------------------------------------------------------------
 

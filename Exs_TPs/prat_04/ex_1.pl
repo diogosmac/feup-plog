@@ -14,3 +14,4 @@ ligado(d,h).
 ligado(l,o).
 ligado(d,i). 
 ligado(i,f).
+

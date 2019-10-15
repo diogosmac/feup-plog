@@ -44,6 +44,24 @@ changePointsB(NumPoints) :-
 
 % ---------------------------------------------------------------------
 
+% Predicado que recebe um board, e que percorre todas as posicoes, contando
+% o numero de pecas de cada tipo, atualizando no final as pontuacoes dos jogadores
+updatePointsNewBoard(Board) :-
+    updatePoints(Board, PointsA, PointsB),
+    changePointsA(PointsA),
+    changePointsB(PointsB).
+
+updatePoints([], _, _).
+
+updatePoints([Line | Rest], PointsA, PointsB) :-
+    updatePointsLine(Line, LinePointsA, LinePointsB),
+    NewLinePointsA is PointsA + LinePointsA,
+    NewLinePointsB is PointsB + LinePointsB,
+    updatePoints(Rest, NewLinePointsA, NewLinePointsB).
+
+
+% ---------------------------------------------------------------------
+
 % introduz uma determinada peça numa determinada posiçao do tabuleiro
 % Line - Linha que queremos (a comecar em 1)
 % Column - Coluna que queremos (a comecar em 1)
