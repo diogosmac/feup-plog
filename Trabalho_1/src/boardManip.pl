@@ -47,18 +47,26 @@ changePointsB(NumPoints) :-
 % Predicado que recebe um board, e que percorre todas as posicoes, contando
 % o numero de pecas de cada tipo, atualizando no final as pontuacoes dos jogadores
 updatePointsNewBoard(Board) :-
-    updatePoints(Board, PointsA, PointsB),
+    updatePoints(Board, 0, 0, PointsA, PointsB),
     changePointsA(PointsA),
     changePointsB(PointsB).
 
-updatePoints([], _, _).
+updatePoints([], CurrPointsA, CurrPointsB, CurrPointsA, CurrPointsB).
 
-updatePoints([Line | Rest], PointsA, PointsB) :-
-    updatePointsLine(Line, LinePointsA, LinePointsB),
-    NewLinePointsA is PointsA + LinePointsA,
-    NewLinePointsB is PointsB + LinePointsB,
-    updatePoints(Rest, NewLinePointsA, NewLinePointsB).
+updatePoints([Line | Rest], CurrPointsA, CurrPointsB, PointsA, PointsB) :-
+    updatePointsLine(Line, 0, 0, LinePointsA, LinePointsB),
+    NewCurrPointsA is CurrPointsA + LinePointsA,
+    NewCurrPointsB is CurrPointsB + LinePointsB,
+    updatePoints(Rest, NewCurrPointsA, NewCurrPointsB, PointsA, PointsB).
 
+
+updatePointsLine([], CurrLinePointsA, CurrLinePointsB, CurrLinePointsA, CurrLinePointsB).
+
+updatePointsLine([Pos | Rest], CurrLinePointsA, CurrLinePointsB, LinePointsA, LinePointsB) :-
+    ((Pos = a, NewCurrLinePointsA is CurrLinePointsA + 1, NewCurrLinePointsB is CurrLinePointsB);
+    (Pos = b, NewCurrLinePointsB is CurrLinePointsB + 1, NewCurrLinePointsA is CurrLinePointsA);
+    (Pos = ' ', NewCurrLinePointsA is CurrLinePointsA, NewCurrLinePointsB is CurrLinePointsB)),
+    updatePointsLine(Rest, NewCurrLinePointsA, NewCurrLinePointsB, LinePointsA, LinePointsB).
 
 % ---------------------------------------------------------------------
 
@@ -75,7 +83,7 @@ playMicrobe(Line, Column, Microbe, BoardIn, BoardOut) :-
 updateLine(1, Column, Microbe, [Line | More], [NewLine | More]) :-
     updateColumn(Column, Microbe, Line, NewLine).
 
-updateLine(N, Column, Microbe, [Line | More], [NewLine | MoreLines]) :-
+updateLine(N, Column, Microbe, [Line | More], [Line | MoreLines]) :-
     N > 1,
     Next is N-1,
     updateLine(Next, Column, Microbe, More, MoreLines).
