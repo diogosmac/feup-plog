@@ -5,14 +5,17 @@
 :- consult('logic.pl').
 :- use_module(library(lists)).
 
-tabuleiroTeste([[' ', a, b, ' ', a, ' ', ' '],
-           [' ', ' ', b, ' ', ' ', ' ', ' '],
-           [' ', ' ', b, ' ', ' ', ' ', ' '],
-           [' ', a, ' ', a, a, ' ', ' '],
-           [' ', ' ', b, ' ', b, ' ', ' '],
-           [' ', ' ', b, ' ', ' ', ' ', ' '],
-           [' ', ' ', b, ' ', a, ' ', ' ']
-          ]).
+tabuleiroTeste(
+    [
+        [ a ,' ',' ',' ',' ',' ',' '],
+        [' ', a ,' ',' ',' ',' ',' '],
+        [ a , a , a , a ,' ',' ',' '],
+        [ a , b , a , b , b ,' ',' '],
+        [ a , a , a , b , b ,' ',' '],
+        [ b , a , a , b , b ,' ',' '],
+        [ b , a , a , a , b , b , a ]
+    ]
+).
 
 % ---------------------------------------------------------------------
 % funcoes de teste
@@ -44,8 +47,9 @@ testPedeLinhaEColuna :-
 
 testDisplayTab :-
     tabuleiroTeste(Tab),
-    changePointsA(6),
-    changePointsB(7),
+    % changePointsA(6),
+    % changePointsB(7),
+    updatePointsNewBoard(Tab),
     display_game(Tab, 'A').
 
 
