@@ -32,6 +32,7 @@ askLineAndColumn(Line, Column) :-
 % os primeiros dois sao os inputs que o utilizador da.
 
 verifyLineAndColumn(LineIn, ColumnIn, LineIn, ColumnIn) :-
+    integer(LineIn), integer(ColumnIn),
     LineIn > 0, LineIn < 8,
     ColumnIn > 0, ColumnIn < 8.
 
