@@ -86,3 +86,10 @@ testMove :-
     move('A', OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard),
     format("~n~n", []),
     display_game(NewBoard, 'B').
+
+testMoveValue :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    moveValue(Board, 'A', ValueA),
+    moveValue(Board, 'B', ValueB),
+    format("~nBoard value for ~s = ~p~nBoard value for ~s = ~p~n~n", ['A', ValueA, 'B', ValueB]).

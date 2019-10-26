@@ -76,3 +76,8 @@ boardLineEndCheck(P, [Head | Tail]) :-
 
 % ---------------------------------------------------------------------
 
+
+moveValue(Board, Player, Value) :-
+    updatePoints(Board, 0, 0, PointsA, PointsB),
+    (Player = 'A', Value is PointsA-PointsB;
+    Player = 'B', Value is PointsB-PointsA).
