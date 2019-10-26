@@ -1,5 +1,6 @@
 :- consult('input.pl').
 :- consult('boardManip.pl').
+:- use_module(library(random)).
 
 % validacao e execucao de uma jogada proposta; modifica o Board passado e retorna em NewBoard
 % OldLine e OldColumn referem-se a posicao onde esta o microbio que se pretende mexer.
@@ -76,8 +77,10 @@ boardLineEndCheck(P, [Head | Tail]) :-
 
 % ---------------------------------------------------------------------
 
+value(Board, Player, Value, 1) :-
+    random(0, 49, Value).
 
-moveValue(Board, Player, Value) :-
+value(Board, Player, Value, 2) :-
     updatePoints(Board, 0, 0, PointsA, PointsB),
     (Player = 'A', Value is PointsA-PointsB;
     Player = 'B', Value is PointsB-PointsA).

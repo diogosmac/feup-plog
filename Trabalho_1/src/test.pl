@@ -87,9 +87,16 @@ testMove :-
     format("~n~n", []),
     display_game(NewBoard, 'B').
 
-testMoveValue :-
+testMoveValueRand :-
     tabuleiroTeste(Board),
     display_game(Board, 'A'),
-    moveValue(Board, 'A', ValueA),
-    moveValue(Board, 'B', ValueB),
+    value(Board, 'A', ValueA, 1),
+    value(Board, 'B', ValueB, 1),
+    format("~nBoard value for ~s = ~p~nBoard value for ~s = ~p~n~n", ['A', ValueA, 'B', ValueB]).
+
+testMoveValueSmart :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    value(Board, 'A', ValueA, 2),
+    value(Board, 'B', ValueB, 2),
     format("~nBoard value for ~s = ~p~nBoard value for ~s = ~p~n~n", ['A', ValueA, 'B', ValueB]).
