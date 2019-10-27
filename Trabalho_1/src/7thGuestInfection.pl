@@ -6,9 +6,10 @@
 
 play :-
     initializeGame,
-    repeat,             % até ter sucesso (fimDeJogo)
-        makeMove,
-        endOfGame,
+    repeat,  
+        once(getState),           % até ter sucesso (fimDeJogo)
+        once(makeMove),
+        once(endOfGame),
     showWinner.
 
 repeat.

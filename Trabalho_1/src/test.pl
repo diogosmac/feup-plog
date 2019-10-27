@@ -100,3 +100,11 @@ testMoveValueSmart :-
     value(Board, 'A', ValueA, 2),
     value(Board, 'B', ValueB, 2),
     format("~nBoard value for ~s = ~p~nBoard value for ~s = ~p~n~n", ['A', ValueA, 'B', ValueB]).
+
+
+testContamineAdjacent :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    contamineAdjacent('A', 7, 7, Board, NewBoard),
+    format("~n~n", []),
+    display_game(NewBoard, 'B').

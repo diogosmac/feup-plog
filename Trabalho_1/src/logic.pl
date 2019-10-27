@@ -19,6 +19,32 @@ handleIsAdjacent('yes', OldLine, OldColumn, Board, Board).
 
 % ---------------------------------------------------------------------
 
+% predicado que, dadas a linha e a coluna da nova peça posicionada, contamina
+% as pecas adjacentes do oponente
+
+contamineAdjacent(Player, Line, Column, Board, NewBoard) :-
+    getMicrobeType(Player, MicrobeType),
+    contaminePosition(MicrobeType, Line - 1, Column - 1, Board, BoardAux1),
+    contaminePosition(MicrobeType, Line - 1, Column, BoardAux1, BoardAux2),
+    contaminePosition(MicrobeType, Line - 1, Column + 1, BoardAux2, BoardAux3),
+    contaminePosition(MicrobeType, Line, Column - 1, BoardAux3, BoardAux4),
+    contaminePosition(MicrobeType, Line, Column + 1, BoardAux4, BoardAux5),
+    contaminePosition(MicrobeType, Line + 1, Column - 1, BoardAux5, BoardAux6),
+    contaminePosition(MicrobeType, Line + 1, Column, BoardAux6, BoardAux7),
+    contaminePosition(MicrobeType, Line + 1, Column + 1, BoardAux7, NewBoard).
+
+
+contaminePosition(MicrobeType, Line, Column, Board, NewBoard) :-
+    Line > 0, Line < 8,
+    Column > 0, Column < 8,
+    returnMicrobeInPos(Line, Column, Board, Microbe),
+    Microbe \= MicrobeType, Microbe \= ' ',
+    playMicrobe(Line, Column, MicrobeType, Board, NewBoard).
+
+contaminePosition(MicrobeType, Line, Column, Board, Board).
+
+% ---------------------------------------------------------------------
+
 % predicado que permite a um jogador que faca uma jogada, ou seja, que selecione
 % uma posicao que tenha um microbio seu, e uma posicao para que esse microbio se mova,
 % modificando o tabuleiro (se input invalido, pede outra vez). 
@@ -77,10 +103,57 @@ boardLineEndCheck(P, [Head | Tail]) :-
 
 % ---------------------------------------------------------------------
 
-value(Board, Player, Value, 1) :-
+% predicado que avalia o estado de jogo, retornando um numero value para o caracterizar.
+% dois niveis de dificuldade do computador:
+% 1 - value e gerado aleatoriamente, de modo a que o computador escolha uma jogada qualquer possivel
+% 2 - value e a diferenca de pecas dos jogadores, de modo a que o computador escolha (gananciosamente) a jogada que o poe mais em vantagem naquele turno
+
+value(1, Board, Player, Value) :-
     random(0, 49, Value).
 
-value(Board, Player, Value, 2) :-
+value(2, Board, Player, Value) :-
     updatePoints(Board, 0, 0, PointsA, PointsB),
     (Player = 'A', Value is PointsA-PointsB;
     Player = 'B', Value is PointsB-PointsA).
+
+
+% ---------------------------------------------------------------------
+
+% predicado a ser utilizado pelo computador, que gera um possivel movimento e produz uma jogada
+% qualquer possivel tendo em conta BoardIn, sendo que o resultado dessa jogada e guardado
+% em BoardOut
+
+% findMove(Player, BoardIn, BoardOut) :-
+%     getMicrobeType(Player, MicrobeType),
+
+
+
+
+
+% ---------------------------------------------------------------------
+
+% predicado que recebe uma lista com todas as opcoes de jogada (tabuleiros possiveis) e,
+% tendo em conta o nivel de dificuldade, chama o predicado value para cada um dos boards,
+% sendo retornado em BestBoard o tabuleiro mais vantajoso
+
+% chooseBestBoard(Level, ListOfValidBoards, Player, BestBoard) :-
+
+
+
+% ---------------------------------------------------------------------
+
+% predicado que, utilizando findall c/ findMove, gera todos os possiveis tabuleiros resultantes 
+% de jogadas validas, retornando-os numa lista
+
+% valid_moves(Player, Board, ListOfValidBoards) :-
+
+
+
+
+% ---------------------------------------------------------------------
+
+% predicado a ser utilizado pelo computador, que tendo em conta o nivel de dificuldade,
+% cria todos os cenarios (jogadas) possiveis e escolhe a melhor delas (c/ value), retornando
+% o novo tabuleiro
+
+% choose_move(Level, Player, Board, NewBoard) :-
