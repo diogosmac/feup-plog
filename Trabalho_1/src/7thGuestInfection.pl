@@ -1,19 +1,17 @@
-:- consult('input.pl').
-:- consult('print.pl').
-:- consult('boardManip.pl').
-:- consult('utility.pl').
+:- consult('mainCycle.pl').
 :- use_module(library(lists)).
 
 play :-
-    initializeGame,
+    startGame,
     repeat,  
-        once(getState),           % até ter sucesso (fimDeJogo)
-        once(makeMove),
-        once(endOfGame),
+        once(getState(Board)),
+        once(changeState),
+        once(saveState(Board)),
+        endOfGame,
     showWinner.
 
 repeat.
 repeat :-
     repeat.
 
-    
+  

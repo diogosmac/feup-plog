@@ -1,7 +1,7 @@
-:- dynamic board/1, pointsA/1, pointsB/1.
+:- dynamic board/1, pointsA/1, pointsB/1, turn/1.
 :- consult('utility.pl').
 
-% tabuleiro initial, 7x7, a ser modificado à medida que o jogo se vai desenrolando.
+% tabuleiro inicial, 7x7, a ser modificado à medida que o jogo se vai desenrolando.
 board([[b, ' ', ' ', ' ', ' ', ' ', a],
        [' ', ' ', ' ', ' ', ' ', ' ', ' '],
        [' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -13,6 +13,8 @@ board([[b, ' ', ' ', ' ', ' ', ' ', a],
 
 pointsA(0).
 pointsB(0).
+
+turn('A').
 
 % ---------------------------------------------------------------------
 % ---------------------------------------------------------------------
@@ -44,6 +46,11 @@ changePointsA(NumPoints) :-
 changePointsB(NumPoints) :-
     retract(pointsB(_)),
     assert(pointsB(NumPoints)).
+
+changeTurn :-
+    retract(turn(Player)),
+    Player =:= 'A' -> Player = 'B';
+    Player = 'A'.
 
 % ---------------------------------------------------------------------
 

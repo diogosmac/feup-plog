@@ -31,3 +31,5 @@ printBoardLine(NumLine, [X | RestLines]) :-
     NewNumLine is NumLine + 1,
     printBoardLine(NewNumLine, RestLines).
 
+% ---------------------------------------------------------------------
+
