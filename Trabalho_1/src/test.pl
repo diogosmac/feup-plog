@@ -5,21 +5,32 @@
 :- consult('logic.pl').
 :- use_module(library(lists)).
 
+% tabuleiroTeste(
+%     [
+%         [ ' ' ,' ',' ',' ',' ',' ',' '],
+%         [a, ' ' ,' ',' ',a,' ',' '],
+%         [ ' ' , ' ' , ' ' , ' ' ,' ',' ',' '],
+%         [ ' ' , b , ' ' , b , b ,' ',' '],
+%         [ ' ' , ' ' , ' ' , b , b ,' ',' '],
+%         [ b , ' ' , a , b , b ,' ',' '],
+%         [ b , ' ' , ' ' , a , b , b , a ]
+%     ]
+% ).
+
 tabuleiroTeste(
     [
-        [ a ,' ',' ',' ',' ',' ',' '],
-        [' ', a ,' ',' ',' ',' ',' '],
-        [ a , a , a , a ,' ',' ',' '],
-        [ a , b , a , b , b ,' ',' '],
-        [ a , a , a , b , b ,' ',' '],
-        [ b , a , a , b , b ,' ',' '],
-        [ b , a , a , a , b , b , a ]
+        [a , b , b,' ',' ',' ',' '],
+        [b , b , b,' ',' ',' ',' '],
+        [b , b , b , ' ' ,' ',' ',' '],
+        [ ' ' , ' ', ' ' , ' ', ' ',' ',' '],
+        [ ' ' , ' ' , ' ' , ' ', ' ',' ',' '],
+        [ ' ', ' ' , ' ' , ' ', ' ',' ',' '],
+        [ ' ', ' ' , ' ' , ' ' , ' ', ' ', ' ']
     ]
 ).
 
 % ---------------------------------------------------------------------
 % funcoes de teste
-:- consult('print.pl').
 
 jogaPecaTest(Linha, Coluna, Peca):-
     tabuleiroTeste(Tab),
@@ -90,17 +101,16 @@ testMove :-
 testMoveValueRand :-
     tabuleiroTeste(Board),
     display_game(Board, 'A'),
-    value(Board, 'A', ValueA, 1),
-    value(Board, 'B', ValueB, 1),
+    value(1, Board, 'A', ValueA),
+    value(1, Board, 'B', ValueB),
     format("~nBoard value for ~s = ~p~nBoard value for ~s = ~p~n~n", ['A', ValueA, 'B', ValueB]).
 
 testMoveValueSmart :-
     tabuleiroTeste(Board),
     display_game(Board, 'A'),
-    value(Board, 'A', ValueA, 2),
-    value(Board, 'B', ValueB, 2),
+    value(2, Board, 'A', ValueA),
+    value(2, Board, 'B', ValueB),
     format("~nBoard value for ~s = ~p~nBoard value for ~s = ~p~n~n", ['A', ValueA, 'B', ValueB]).
-
 
 testContamineAdjacent :-
     tabuleiroTeste(Board),
@@ -108,3 +118,21 @@ testContamineAdjacent :-
     contamineAdjacent('A', 7, 7, Board, NewBoard),
     format("~n~n", []),
     display_game(NewBoard, 'B').
+
+testGetPositions :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    getPositionsForMicrobe(a, Board, Line, Column).
+
+testValidMoves :-
+    tabuleiroTeste(Board),
+    valid_moves('A', Board, ListOfValidBoards),
+    length(ListOfValidBoards, Length),
+    format("~n~n Valid moves: ~p~n~n", [Length]).
+
+
+testChooseMove(Level) :-
+    tabuleiroTeste(Board),
+    display_game(Board, 'A'),
+    choose_move(Level, 'A', Board, NewBoard),
+    display_game(NewBoard, 'A').

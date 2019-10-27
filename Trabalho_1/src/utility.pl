@@ -21,6 +21,8 @@ checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdj
 % e verifica se a posicao final ("nova") esta livre.
 
 verifyMicrobePositions(MicrobeType, Board, OldLine, OldColumn, NewLine, NewColumn) :-
+    OldLine > 0, OldLine < 8, OldColumn > 0, OldColumn < 8,
+    NewLine > 0, NewLine < 8, NewColumn > 0, NewColumn < 8,
     returnMicrobeInPos(OldLine, OldColumn, Board, Microbe1),
     Microbe1 = MicrobeType,
     returnMicrobeInPos(NewLine, NewColumn, Board, Microbe2),

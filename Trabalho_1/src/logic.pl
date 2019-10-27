@@ -10,7 +10,8 @@ move(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard) :-
     getMicrobeType(Player, MicrobeType),
     checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdjacent),
     playMicrobe(NewLine, NewColumn, MicrobeType, Board, BoardOut),
-    handleIsAdjacent(IsAdjacent, OldLine, OldColumn, BoardOut, NewBoard).
+    handleIsAdjacent(IsAdjacent, OldLine, OldColumn, BoardOut, BoardOut2),
+    contamineAdjacent(Player, NewLine, NewColumn, BoardOut2, NewBoard).
 
 handleIsAdjacent('no', OldLine, OldColumn, BoardIn, BoardOut) :-
     playMicrobe(OldLine, OldColumn, ' ', BoardIn, BoardOut).
@@ -24,15 +25,14 @@ handleIsAdjacent('yes', OldLine, OldColumn, Board, Board).
 
 contamineAdjacent(Player, Line, Column, Board, NewBoard) :-
     getMicrobeType(Player, MicrobeType),
-    contaminePosition(MicrobeType, Line - 1, Column - 1, Board, BoardAux1),
-    contaminePosition(MicrobeType, Line - 1, Column, BoardAux1, BoardAux2),
-    contaminePosition(MicrobeType, Line - 1, Column + 1, BoardAux2, BoardAux3),
-    contaminePosition(MicrobeType, Line, Column - 1, BoardAux3, BoardAux4),
-    contaminePosition(MicrobeType, Line, Column + 1, BoardAux4, BoardAux5),
-    contaminePosition(MicrobeType, Line + 1, Column - 1, BoardAux5, BoardAux6),
-    contaminePosition(MicrobeType, Line + 1, Column, BoardAux6, BoardAux7),
-    contaminePosition(MicrobeType, Line + 1, Column + 1, BoardAux7, NewBoard).
-
+    AuxLine1 is Line - 1, AuxCol1 is Column - 1, contaminePosition(MicrobeType, AuxLine1, AuxCol1, Board, BoardAux1),
+    AuxLine2 is Line - 1, AuxCol2 is Column, contaminePosition(MicrobeType, AuxLine2, AuxCol2, BoardAux1, BoardAux2),
+    AuxLine3 is Line - 1, AuxCol3 is Column + 1, contaminePosition(MicrobeType, AuxLine3, AuxCol3, BoardAux2, BoardAux3),
+    AuxLine4 is Line, AuxCol4 is Column - 1, contaminePosition(MicrobeType, AuxLine4, AuxCol4, BoardAux3, BoardAux4),
+    AuxLine5 is Line, AuxCol5 is Column + 1, contaminePosition(MicrobeType, AuxLine5, AuxCol5, BoardAux4, BoardAux5),
+    AuxLine6 is Line + 1, AuxCol6 is Column - 1, contaminePosition(MicrobeType, AuxLine6, AuxCol6, BoardAux5, BoardAux6),
+    AuxLine7 is Line + 1, AuxCol7 is Column, contaminePosition(MicrobeType, AuxLine7, AuxCol7, BoardAux6, BoardAux7),
+    AuxLine8 is Line + 1, AuxCol8 is Column + 1, contaminePosition(MicrobeType, AuxLine8, AuxCol8, BoardAux7, NewBoard).
 
 contaminePosition(MicrobeType, Line, Column, Board, NewBoard) :-
     Line > 0, Line < 8,
@@ -123,12 +123,25 @@ value(2, Board, Player, Value) :-
 % qualquer possivel tendo em conta BoardIn, sendo que o resultado dessa jogada e guardado
 % em BoardOut
 
-% findMove(Player, BoardIn, BoardOut) :-
-%     getMicrobeType(Player, MicrobeType),
-
-
-
-
+findMove(Player, BoardIn, BoardOut) :-
+    getMicrobeType(Player, MicrobeType),
+    getPositionsForMicrobe(MicrobeType, BoardIn, Line, Column),
+    ((AuxLine1 is Line - 2, AuxColumn1 is Column - 2, once(move(Player, Line, Column, AuxLine1, AuxColumn1, BoardIn, BoardOut)));
+     (AuxLine2 is Line - 2, AuxColumn2 is Column, once(move(Player, Line, Column, AuxLine2, AuxColumn2, BoardIn, BoardOut)));
+     (AuxLine3 is Line - 2, AuxColumn3 is Column + 2, once(move(Player, Line, Column, AuxLine3, AuxColumn3, BoardIn, BoardOut)));
+     (AuxLine4 is Line - 1, AuxColumn4 is Column - 1, once(move(Player, Line, Column, AuxLine4, AuxColumn4, BoardIn, BoardOut)));
+     (AuxLine5 is Line - 1, AuxColumn5 is Column, once(move(Player, Line, Column, AuxLine5, AuxColumn5, BoardIn, BoardOut)));
+     (AuxLine6 is Line - 1, AuxColumn6 is Column + 1, once(move(Player, Line, Column, AuxLine6, AuxColumn6, BoardIn, BoardOut)));
+     (AuxLine7 is Line, AuxColumn7 is Column - 2, once(move(Player, Line, Column, AuxLine7, AuxColumn7, BoardIn, BoardOut)));
+     (AuxLine8 is Line, AuxColumn8 is Column - 1, once(move(Player, Line, Column, AuxLine8, AuxColumn8, BoardIn, BoardOut)));
+     (AuxLine9 is Line, AuxColumn9 is Column + 1, once(move(Player, Line, Column, AuxLine9, AuxColumn9, BoardIn, BoardOut)));
+     (AuxLine10 is Line, AuxColumn10 is Column + 2, once(move(Player, Line, Column, AuxLine10, AuxColumn10, BoardIn, BoardOut)));
+     (AuxLine11 is Line + 1, AuxColumn11 is Column - 1, once(move(Player, Line, Column, AuxLine11, AuxColumn11, BoardIn, BoardOut)));
+     (AuxLine12 is Line + 1, AuxColumn12 is Column, once(move(Player, Line, Column, AuxLine12, AuxColumn12, BoardIn, BoardOut)));
+     (AuxLine13 is Line + 1, AuxColumn13 is Column + 1, once(move(Player, Line, Column, AuxLine13, AuxColumn13, BoardIn, BoardOut)));
+     (AuxLine14 is Line + 2, AuxColumn14 is Column - 2, once(move(Player, Line, Column, AuxLine14, AuxColumn14, BoardIn, BoardOut)));
+     (AuxLine15 is Line + 2, AuxColumn15 is Column, once(move(Player, Line, Column, AuxLine15, AuxColumn15, BoardIn, BoardOut)));
+     (AuxLine16 is Line + 2, AuxColumn16 is Column + 2, once(move(Player, Line, Column, AuxLine16, AuxColumn16, BoardIn, BoardOut)))).
 
 % ---------------------------------------------------------------------
 
@@ -136,18 +149,26 @@ value(2, Board, Player, Value) :-
 % tendo em conta o nivel de dificuldade, chama o predicado value para cada um dos boards,
 % sendo retornado em BestBoard o tabuleiro mais vantajoso
 
-% chooseBestBoard(Level, ListOfValidBoards, Player, BestBoard) :-
+% se nao existir nenhuma jogada valida, o tabuleiro permanece igual, e o turno e passado a frente
+
+chooseBestBoard(Level, ListOfValidBoards, Player, Board, BestBoard) :-
+    chooseBestBoardAux(Level, ListOfValidBoards, Player, -999999, Board, BestBoard).
 
 
+chooseBestBoardAux(Level, [], Player, AuxValue, AuxBoard, AuxBoard).
+
+chooseBestBoardAux(Level, [Board | Rest], Player, AuxValue, AuxBoard, BestBoard) :-
+    value(Level, Board, Player, Value),
+    Value > AuxValue -> chooseBestBoardAux(Level, Rest, Player, Value, Board, BestBoard);
+    chooseBestBoardAux(Level, Rest, Player, AuxValue, AuxBoard, BestBoard).
 
 % ---------------------------------------------------------------------
 
 % predicado que, utilizando findall c/ findMove, gera todos os possiveis tabuleiros resultantes 
 % de jogadas validas, retornando-os numa lista
 
-% valid_moves(Player, Board, ListOfValidBoards) :-
-
-
+valid_moves(Player, Board, ListOfValidBoards) :-
+    findall(BoardOut, findMove(Player, Board, BoardOut), ListOfValidBoards).
 
 
 % ---------------------------------------------------------------------
@@ -156,4 +177,6 @@ value(2, Board, Player, Value) :-
 % cria todos os cenarios (jogadas) possiveis e escolhe a melhor delas (c/ value), retornando
 % o novo tabuleiro
 
-% choose_move(Level, Player, Board, NewBoard) :-
+choose_move(Level, Player, Board, NewBoard) :-
+    valid_moves(Player, Board, ListOfValidBoards),
+    chooseBestBoard(Level, ListOfValidBoards, Player, Board, NewBoard).

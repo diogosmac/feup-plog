@@ -124,3 +124,30 @@ analizeColumn(N, [P | Rest], Microbe) :-
     analizeColumn(Next, Rest, Microbe).
 
 % ---------------------------------------------------------------------
+
+% predicado que retorna com valores de linha e coluna que contenham o tipo de microbio passado
+% como parametro
+
+getPositionsForMicrobe(Microbe, Board, Line, Column) :-
+    getLineForMicrobe(Microbe, Board, 1, Line, Column).
+
+
+getLineForMicrobe(Microbe, [L | Rest], LineAux, LineAux, ColumnAux) :-
+    LineAux < 8,
+    getColumnForMicrobe(Microbe, L, 1, ColumnAux).
+
+getLineForMicrobe(Microbe, [L | Rest], LineAux, Line, Column) :-
+    LineAux < 8,
+    NextLine is LineAux + 1,
+    getLineForMicrobe(Microbe, Rest, NextLine, Line, Column).
+
+
+getColumnForMicrobe(Microbe, [Pos | Rest], ColumnAux, ColumnAux) :-
+    ColumnAux < 8,
+    Microbe = Pos.
+
+getColumnForMicrobe(Microbe, [Pos | Rest], ColumnAux, Column) :-
+    ColumnAux < 8,
+    NextColumn is ColumnAux + 1,
+    getColumnForMicrobe(Microbe, Rest, NextColumn, Column).
+
