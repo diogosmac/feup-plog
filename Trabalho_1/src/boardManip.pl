@@ -52,6 +52,36 @@ changeTurn :-
     Player =:= 'A' -> Player = 'B';
     Player = 'A'.
 
+
+resetTurn :-
+    retract(turn(_)),
+    assert(turn('A')).
+
+
+% predicado que, consoante a opcao do menu escolhida, adiciona predicados
+% que indicam o tipo de jogadores que irao participar no jogo
+% opcao 1 - humano vs humano
+% opcao 2 - humano vs computador
+% opcao 3 - computador vs computador
+
+setPlayerTypes(1) :-
+    assert(playerType('A', 'H')),
+    assert(playerType('B', 'H')).
+
+setPlayerTypes(2) :-
+    assert(playerType('A', 'H')),
+    assert(playerType('B', 'C')).
+
+setPlayerTypes(3) :-
+    assert(playerType('A', 'C')),
+    assert(playerType('B', 'C')).
+
+
+retractPlayerTypes :-
+    retract(playerType('A', _)),
+    retract(playerType('B', _)).
+
+
 % ---------------------------------------------------------------------
 
 % Predicado que recebe um board, e que percorre todas as posicoes, contando

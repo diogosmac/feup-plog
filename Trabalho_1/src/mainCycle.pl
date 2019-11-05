@@ -7,6 +7,8 @@
 % comecar o jogo, como por exemplo o nivel de dificuldade, etc.
 % tambem inicializa o estado de jogo, fazendo "reset" ao tabuleiro e a pontuacao
 
+% TODO: como retirar nivel de dificuldade, se for computador
+
 % startGame :-
 
 
@@ -23,7 +25,7 @@
 % predicado que modifica o estado de jogo (tabuleiro e pontuacoes), simbolizando
 % um turno para um jogador
 
-% changeState :-
+% changeState(Board, NewBoard) :-
 
 
 % ---------------------------------------------------------------------

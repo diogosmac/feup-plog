@@ -5,7 +5,7 @@ play :-
     startGame,
     repeat,  
         once(getState(Board)),
-        once(changeState),
+        once(changeState(Board, NewBoard)),
         once(saveState(Board)),
         endOfGame,
     showWinner.
