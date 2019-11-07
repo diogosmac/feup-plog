@@ -49,8 +49,11 @@ changePointsB(NumPoints) :-
 
 changeTurn :-
     retract(turn(Player)),
-    Player =:= 'A' -> Player = 'B';
-    Player = 'A'.
+    changeTurnAux(Player, NewPlayer),
+    assert(turn(NewPlayer)).
+
+changeTurnAux('A', 'B').
+changeTurnAux('B', 'A').
 
 
 resetTurn :-
@@ -103,11 +106,17 @@ updatePoints([Line | Rest], CurrPointsA, CurrPointsB, PointsA, PointsB) :-
 updatePointsLine([], CurrLinePointsA, CurrLinePointsB, CurrLinePointsA, CurrLinePointsB).
 
 updatePointsLine([Pos | Rest], CurrLinePointsA, CurrLinePointsB, LinePointsA, LinePointsB) :-
-    ((Pos = a, NewCurrLinePointsA is CurrLinePointsA + 1, NewCurrLinePointsB is CurrLinePointsB);
-    (Pos = b, NewCurrLinePointsB is CurrLinePointsB + 1, NewCurrLinePointsA is CurrLinePointsA);
-    (Pos = ' ', NewCurrLinePointsA is CurrLinePointsA, NewCurrLinePointsB is CurrLinePointsB)),
+    Pos = a, NewCurrLinePointsA is CurrLinePointsA + 1, NewCurrLinePointsB is CurrLinePointsB,
     updatePointsLine(Rest, NewCurrLinePointsA, NewCurrLinePointsB, LinePointsA, LinePointsB).
 
+updatePointsLine([Pos | Rest], CurrLinePointsA, CurrLinePointsB, LinePointsA, LinePointsB) :-
+    Pos = b, NewCurrLinePointsB is CurrLinePointsB + 1, NewCurrLinePointsA is CurrLinePointsA,
+    updatePointsLine(Rest, NewCurrLinePointsA, NewCurrLinePointsB, LinePointsA, LinePointsB).
+
+updatePointsLine([Pos | Rest], CurrLinePointsA, CurrLinePointsB, LinePointsA, LinePointsB) :-
+    Pos = ' ',
+    updatePointsLine(Rest, CurrLinePointsA, CurrLinePointsB, LinePointsA, LinePointsB).
+    
 % ---------------------------------------------------------------------
 
 % introduz uma determinada peça numa determinada posiçao do tabuleiro

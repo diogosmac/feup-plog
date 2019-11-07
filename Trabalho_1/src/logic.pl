@@ -113,8 +113,13 @@ value(1, Board, Player, Value) :-
 
 value(2, Board, Player, Value) :-
     updatePoints(Board, 0, 0, PointsA, PointsB),
-    (Player = 'A', Value is PointsA-PointsB;
-    Player = 'B', Value is PointsB-PointsA).
+    valueAux(Player, Value, PointsA, PointsB).
+
+valueAux(Player, Value, PointsA, PointsB) :-
+    Player = 'A', Value is PointsA-PointsB.
+
+valueAux(Player, Value, PointsA, PointsB) :-
+    Player = 'B', Value is PointsB-PointsA.
 
 
 % ---------------------------------------------------------------------
