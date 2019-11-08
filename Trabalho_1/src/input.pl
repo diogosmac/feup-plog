@@ -1,5 +1,6 @@
 :- consult('utility.pl').
 :- consult('boardManip.pl').
+:- consult('print.pl').
 
 % le(Prompt, Texto) :-
 %     write(Prompt), write('>'),
@@ -100,3 +101,36 @@ askPlayerMove(Player, OldLine, OldColumn, NewLine, NewColumn) :-
 %     format("Please select a new position for that microbe.~n~n", []),
 %     askLineAndColumn(NewLineIn, NewColumnIn),
 %     verifyMicrobeMovement(Board, OldLine, OldColumn, NewLineIn, NewColumnIn, Line, Column).
+
+% ---------------------------------------------------------------------
+
+askBetweenValues(Option, Value1, Value2) :-
+    readInt('Option ', OptionIn),
+    verifyMenuOption(OptionIn, Option, Value1, Value2).
+
+verifyMenuOption(OptionIn, OptionIn, Value1, Value2) :-
+    integer(OptionIn),
+    OptionIn >= Value1, OptionIn =< Value2.
+
+verifyMenuOption(OptionIn, Option, Value1, Value2) :-
+    format("~n~nInvalid inputs. Please, try again.~n~n", []),
+    readInt('Option ', NewOptionIn),
+    verifyMenuOption(NewOptionIn, Option, Value1, Value2).
+
+% ---------------------------------------------------------------------
+
+askDifficulty(1) :-
+    assertDifficulty(1, 1). % difficulty doesn't matter; still needs to be asserted so it can later be retracted with no problem
+
+askDifficulty(2) :-
+    printDifficultyMenu('B'),
+    askBetweenValues(Difficulty, 1, 2),
+    assertDifficulty(1, Difficulty). % difficulty for computer A doesn't matter
+
+askDifficulty(3) :-
+    printDifficultyMenu('A'),
+    askBetweenValues(DifficultyA, 1, 2),
+    printDifficultyMenu('B'),
+    askBetweenValues(DifficultyB, 1, 2),
+    assertDifficulty(DifficultyA, DifficultyB).
+    

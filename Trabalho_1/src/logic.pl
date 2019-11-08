@@ -54,24 +54,6 @@ contaminePosition(MicrobeType, Line, Column, Board, Board).
 
 % ---------------------------------------------------------------------
 
-% predicado que determina se o jogo ja tem um vencedor, verificando
-% as condicoes de vitoria:
-% - apenas existem pecas de uma das cores
-% - o tabuleiro esta completamente preenchido
-
-game_over(Board, Winner) :-
-    ((getMicrobeType('B', MicrobeB),
-      boardEndCheck(MicrobeB, Board));
-
-     (getMicrobeType('A', MicrobeA),
-      boardEndCheck(MicrobeA, Board));
-
-      boardEndCheck(' ', Board)),
-     
-      pointsA(A),
-      pointsB(B),
-      declareWinner(A, B, Winner).
-
 % predicado que mostra o vencedor do jogo, tendo em conta os pontos de cada um
 
 declareWinner(A, B, Winner) :-
@@ -160,7 +142,8 @@ chooseBestBoard(Level, ListOfValidBoards, Player, Board, BestBoard) :-
     chooseBestBoardAux(Level, ListOfValidBoards, Player, -999999, Board, BestBoard).
 
 
-chooseBestBoardAux(Level, [], Player, AuxValue, AuxBoard, AuxBoard).
+chooseBestBoardAux(Level, [], Player, AuxValue, AuxBoard, AuxBoard) :-
+    printNoValidMoves.
 
 chooseBestBoardAux(Level, [Board | Rest], Player, AuxValue, AuxBoard, BestBoard) :-
     value(Level, Board, Player, Value),

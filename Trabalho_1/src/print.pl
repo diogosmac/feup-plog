@@ -33,3 +33,38 @@ printBoardLine(NumLine, [X | RestLines]) :-
 
 % ---------------------------------------------------------------------
 
+printMenu :-
+    format("-----------------------------------------------------~n~n", []),
+    format("                7th Guest: Infection                 ~n~n", []),
+    format("-----------------------------------------------------~n~n", []),
+    format("Please choose one of the following game options:~n~n", []),
+    format("1: Human / Human~n~n", []),
+    format("2: Human / Computer~n~n", []),
+    format("3: Computer / Computer~n~n", []).
+
+% ---------------------------------------------------------------------
+
+printDifficultyMenu(Player) :-
+    format("-----------------------------------------------------~n~n", []),
+    format("Please choose a difficulty for the computer (Player ~p):~n~n", [Player]),
+    format("-----------------------------------------------------~n~n", []),
+    format("1: Easy~n~n", []),
+    format("2: Medium~n~n", []).
+
+% ---------------------------------------------------------------------
+
+showWinner(Winner) :-
+    format("-----------------------------------------------------~n~n", []),
+    format("     CONGRATS Player ~p! You are the winner!         ~n~n", [Winner]),
+    format("-----------------------------------------------------~n~n", []).
+
+% ---------------------------------------------------------------------
+
+printInvalidMove :-
+    format("~nThe move chosen by the player is invalid. Please choose another move.~n~n", []).
+
+
+% ---------------------------------------------------------------------
+
+printNoValidMoves :-
+    format("~nThere are no valid moves for this player. The turn will be passed to the other player.~n~n", []).

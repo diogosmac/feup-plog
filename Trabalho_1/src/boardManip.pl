@@ -1,4 +1,4 @@
-:- dynamic board/1, pointsA/1, pointsB/1, turn/1.
+:- dynamic board/1, pointsA/1, pointsB/1, turn/1, playerType/2, difficulty/2.
 :- consult('utility.pl').
 
 % tabuleiro inicial, 7x7, a ser modificado à medida que o jogo se vai desenrolando.
@@ -84,6 +84,23 @@ retractPlayerTypes :-
     retract(playerType('A', _)),
     retract(playerType('B', _)).
 
+% -----------------
+
+assertDifficulty(DifficultyA, DifficultyB) :-
+    assert(difficulty('A', DifficultyA)),
+    assert(difficulty('B', DifficultyB)).
+
+retractDifficulty :-
+    retract(difficulty('A', _)),
+    retract(difficulty('B', _)).
+
+% -----------------
+
+resetPoints :-
+    retract(pointsA(_)),
+    retract(pointsB(_)),
+    assert(pointsA(0)),
+    assert(pointsB(0)).
 
 % ---------------------------------------------------------------------
 
