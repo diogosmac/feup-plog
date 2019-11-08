@@ -18,25 +18,33 @@ display_game(Board, Player) :-
 
 
 printBoard(Board) :-
-    format("     |  1  |  2  |  3  |  4  |  5  |  6  |  7  |~n", []),
-    format("-----|-----|-----|-----|-----|-----|-----|-----|~n", []),
+    format("       ----------------------------------------- ~n", []),
+    format("      |  1  |  2  |  3  |  4  |  5  |  6  |  7  |~n", []),
+    format("|-----|-----|-----|-----|-----|-----|-----|-----|~n", []),
     printBoardLine(1, Board).
 
 printBoardLine(_, []).
 
 printBoardLine(NumLine, [X | RestLines]) :-
-    format("  ~d  ", [NumLine]),
-    format("|  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |~n", X),
-    format("-----| --- | --- | --- | --- | --- | --- | --- |~n", []),
+    format("|  ~d  |", [NumLine]),
+    format("  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |~n", X),
+    format("|-----|-----|-----|-----|-----|-----|-----|-----|~n", []),
     NewNumLine is NumLine + 1,
     printBoardLine(NewNumLine, RestLines).
 
 % ---------------------------------------------------------------------
 
+    % format("-----------------------------------------------------~n~n", []),
+    % format("                7th Guest: Infection                 ~n~n", []),
+    % format("-----------------------------------------------------~n~n", []),
 printMenu :-
-    format("-----------------------------------------------------~n~n", []),
-    format("                7th Guest: Infection                 ~n~n", []),
-    format("-----------------------------------------------------~n~n", []),
+    format("   ____________         __________   ___     ___   __________   __________   __________   ~n", []),
+    format("   \\_______   / TH     /  _______/  /  /    /  /  /  _______/  /  _______/  /___   ___/   ~n", []),
+    format("          /  /        /  /   ___   /  /    /  /  /  /____     /  /____         /  /       ~n", []),
+    format("         /  /        /  /   /  /  /  /    /  /  /  _____/     \\_____  \\       /  /        ~n", []),
+    format("        /  /        /  /___/  /  /  /____/  /  /  /______   _______/  /      /  /         ~n", []),
+    format("       /__/         \\________/   \\_________/   \\________/  /_________/      /__/          ~n~n", []),
+    format("                                     I N F E C T I O N                                    ~n~n", []),
     format("Please choose one of the following game options:~n~n", []),
     format("1: Human / Human~n~n", []),
     format("2: Human / Computer~n~n", []),
@@ -62,7 +70,6 @@ showWinner(Winner) :-
 
 printInvalidMove :-
     format("~nThe move chosen by the player is invalid. Please choose another move.~n~n", []).
-
 
 % ---------------------------------------------------------------------
 

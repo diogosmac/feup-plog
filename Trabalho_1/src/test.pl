@@ -7,25 +7,25 @@
 
 % tabuleiroTeste(
 %     [
-%         [ ' ' ,' ',' ',' ',' ',' ',' '],
-%         [a, ' ' ,' ',' ',a,' ',' '],
-%         [ ' ' , ' ' , ' ' , ' ' ,' ',' ',' '],
-%         [ ' ' , b , ' ' , b , b ,' ',' '],
-%         [ ' ' , ' ' , ' ' , b , b ,' ',' '],
-%         [ b , ' ' , a , b , b ,' ',' '],
-%         [ b , ' ' , ' ' , a , b , b , a ]
+%         [' ',' ',' ',' ',' ',' ',' '],
+%         [ a ,' ',' ',' ', a ,' ',' '],
+%         [' ',' ',' ',' ',' ',' ',' '],
+%         [' ', b ,' ', b , b ,' ',' '],
+%         [' ',' ',' ', b , b ,' ',' '],
+%         [ b ,' ', a , b , b ,' ',' '],
+%         [ b ,' ',' ', a , b , b , a ]
 %     ]
 % ).
 
 tabuleiroTeste(
     [
-        [a , b , b,' ',' ',' ',' '],
-        [b , b , b,' ',' ',' ',' '],
-        [b , b , b , ' ' ,' ',' ',' '],
-        [ ' ' , ' ', ' ' , ' ', ' ',' ',' '],
-        [ ' ' , ' ' , ' ' , ' ', ' ',' ',' '],
-        [ ' ', ' ' , ' ' , ' ', ' ',' ',' '],
-        [ ' ', ' ' , ' ' , ' ' , ' ', ' ', ' ']
+        [ a , b , b ,' ',' ',' ',' '],
+        [ b , b , b ,' ',' ',' ',' '],
+        [ b , b , b ,' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' '],
+        [' ',' ',' ',' ',' ',' ',' ']
     ]
 ).
 
@@ -115,7 +115,7 @@ testMoveValueSmart :-
 testContamineAdjacent :-
     tabuleiroTeste(Board),
     display_game(Board, 'A'),
-    contamineAdjacent('A', 7, 7, Board, NewBoard),
+    contamineAdjacent('A', 4, 2, Board, NewBoard),
     format("~n~n", []),
     display_game(NewBoard, 'B').
 
@@ -133,6 +133,7 @@ testValidMoves :-
 
 testChooseMove(Level) :-
     tabuleiroTeste(Board),
-    display_game(Board, 'A'),
-    choose_move(Level, 'A', Board, NewBoard),
-    display_game(NewBoard, 'A').
+    display_game(Board, 'B'),
+    choose_move(Level, 'B', Board, NewBoard),
+    format("~nChoosing play . . .~n~n", []),
+    display_game(NewBoard, 'B').

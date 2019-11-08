@@ -138,12 +138,14 @@ findMove(Player, BoardIn, BoardOut) :-
 
 % se nao existir nenhuma jogada valida, o tabuleiro permanece igual, e o turno e passado a frente
 
+chooseBestBoardAux(Level, [], Player, Board, BestBoard) :-
+    printNoValidMoves.
+
 chooseBestBoard(Level, ListOfValidBoards, Player, Board, BestBoard) :-
     chooseBestBoardAux(Level, ListOfValidBoards, Player, -999999, Board, BestBoard).
 
 
-chooseBestBoardAux(Level, [], Player, AuxValue, AuxBoard, AuxBoard) :-
-    printNoValidMoves.
+chooseBestBoardAux(Level, [], Player, AuxValue, AuxBoard, AuxBoard).
 
 chooseBestBoardAux(Level, [Board | Rest], Player, AuxValue, AuxBoard, BestBoard) :-
     value(Level, Board, Player, Value),

@@ -25,7 +25,7 @@ startGame :-
 % predicado que vai buscar o estado de jogo (tabuleiro) atual, e de quem e o turno atual
 
 getState(Board) :-
-      removeBoard(Board).
+    removeBoard(Board).
 
 
 % ---------------------------------------------------------------------
@@ -75,8 +75,8 @@ changeStateAux(Player, 'C', Board, NewBoard) :-
 % predicado que guarda o estado de jogo, para o proximo ciclo, e calcula o proximo jogador a jogar
 
 saveState(Board) :-
-      saveBoard(Board),
-      changeTurn.
+    saveBoard(Board),
+    changeTurn.
 
 % ---------------------------------------------------------------------
 
@@ -94,9 +94,9 @@ game_over(Board, Winner) :-
 
       boardEndCheck(' ', Board)),
      
-      pointsA(A),
-      pointsB(B),
-      declareWinner(A, B, Winner).
+    pointsA(A),
+    pointsB(B),
+    declareWinner(A, B, Winner).
 
 % ---------------------------------------------------------------------
 
