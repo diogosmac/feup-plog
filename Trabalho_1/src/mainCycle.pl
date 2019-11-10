@@ -1,7 +1,4 @@
-:- consult('input.pl').
-:- consult('print.pl').
-:- consult('boardManip.pl').
-:- consult('utility.pl').
+:- consult('logic.pl').
 :- use_module(library(lists)).
 
 repeat.
@@ -26,7 +23,6 @@ startGame :-
 
 getState(Board) :-
     removeBoard(Board).
-
 
 % ---------------------------------------------------------------------
 
@@ -101,6 +97,9 @@ game_over(Board, Winner) :-
 % ---------------------------------------------------------------------
 
 showWinnerAndReset(Winner) :-
+    turn(Player),
+    board(Board),
+    display_game(Board, Player),
     showWinner(Winner),
     resetBoard,
     resetTurn,

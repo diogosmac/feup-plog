@@ -1,5 +1,4 @@
 :- consult('input.pl').
-:- consult('boardManip.pl').
 :- use_module(library(random)).
 
 % validacao e execucao de uma jogada proposta; modifica o Board passado e retorna em NewBoard
@@ -42,15 +41,6 @@ contaminePosition(MicrobeType, Line, Column, Board, NewBoard) :-
     playMicrobe(Line, Column, MicrobeType, Board, NewBoard).
 
 contaminePosition(MicrobeType, Line, Column, Board, Board).
-
-% ---------------------------------------------------------------------
-
-% predicado que permite a um jogador que faca uma jogada, ou seja, que selecione
-% uma posicao que tenha um microbio seu, e uma posicao para que esse microbio se mova,
-% modificando o tabuleiro (se input invalido, pede outra vez). 
-
-% askAndMakeMove(BoardIn, BoardOut, Player) :-
-
 
 % ---------------------------------------------------------------------
 

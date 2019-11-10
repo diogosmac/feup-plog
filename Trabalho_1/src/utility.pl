@@ -1,6 +1,4 @@
-
 getMicrobeType('A', a).
-
 getMicrobeType('B', b).
 
 % ---------------------------------------------------------------------
@@ -12,7 +10,6 @@ getMicrobeType('B', b).
 checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdjacent) :-
     verifyMicrobePositions(MicrobeType, Board, OldLine, OldColumn, NewLine, NewColumn),
     verifyMicrobeMovement(OldLine, OldColumn, NewLine, NewColumn, IsAdjacent).
-
 
 % ---------------------------------------------------------------------
 

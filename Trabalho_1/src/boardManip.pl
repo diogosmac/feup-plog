@@ -11,12 +11,11 @@ board([[b, ' ', ' ', ' ', ' ', ' ', a],
        [a, ' ', ' ', ' ', ' ', ' ', b]
       ]).
 
-pointsA(0).
-pointsB(0).
+pointsA(2).
+pointsB(2).
 
 turn('A').
 
-% ---------------------------------------------------------------------
 % ---------------------------------------------------------------------
 
 removeBoard(Board) :-
@@ -99,8 +98,8 @@ retractDifficulty :-
 resetPoints :-
     retract(pointsA(_)),
     retract(pointsB(_)),
-    assert(pointsA(0)),
-    assert(pointsB(0)).
+    assert(pointsA(2)),
+    assert(pointsB(2)).
 
 % ---------------------------------------------------------------------
 

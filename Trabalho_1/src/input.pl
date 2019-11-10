@@ -1,20 +1,5 @@
-:- consult('utility.pl').
 :- consult('boardManip.pl').
 :- consult('print.pl').
-
-% le(Prompt, Texto) :-
-%     write(Prompt), write('>'),
-%     get0(Ch),
-%     leResto(Ch, ListaChars),
-%     name(Texto, ListaChars).
-
-% leResto(10,[]).
-% leResto(13,[]).
-% leResto(Ch, [Ch | Mais]) :-
-%     get0(Ch1),
-%     leResto(Ch1, Mais).
-
-% ---------------------------------------------------------------------
 
 readInt(Prompt, Number) :-
     write(Prompt), write('> '),
@@ -53,54 +38,6 @@ askPlayerMove(Player, OldLine, OldColumn, NewLine, NewColumn) :-
     format("~n~nPlease select a new position for that microbe.~n~n", []),
     askLineAndColumn(NewLine, NewColumn),
     format("~n~n", []).
-    
-% ---------------------------------------------------------------------
-% ---------------------FUNCOES EM BAIXO NAO SEI SE IRAO SER UTILIZADAS ----------------------------------------
-
-
-% Predicado que pede, a um determinado jogador, que escolha um seu microbio,
-% numa determianda linha e coluna, de modo a ser movimentado. Inputs invalidos
-% sao verificados.
-
-% askMicrobeSelect(Player, Board, Line, Column) :-
-%     format("Player ~p, please select a microbe to move.~n~n", [Player]),
-%     askLineAndColumn(LineIn, ColumnIn),
-%     verifyMicrobeSelect(Player, Board, LineIn, ColumnIn, Line, Column).
-
-% verifyMicrobeSelect(Player, Board, LineIn, ColumnIn, LineIn, ColumnIn) :-
-%     getMicrobeType(Player, MicrobeType),
-%     returnMicrobeInPos(LineIn, ColumnIn, Board, Microbe),
-%     Microbe = MicrobeType.
-
-% verifyMicrobeSelect(Player, Board, LineIn, ColumnIn, Line, Column) :-
-%     format("~n~nPlayer ~p has no microbes in that position. Please, try again.~n~n", [Player]),
-%     format("Player ~p, please select a microbe to move.~n~n", [Player]),
-%     askLineAndColumn(NewLineIn, NewColumnIn),
-%     verifyMicrobeSelect(Player, Board, NewLineIn, NewColumnIn, Line, Column).
-
-
-% ---------------------------------------------------------------------
-% Predicado que pede (a seguir a escolher um microbio) que se escolha uma nova posicao para o mesmo.
-% Inputs invalidos sao verificados.
-
-% askMicrobeMovement(Board, OldLine, OldColumn, Line, Column) :-
-%     format("Please select a new position for that microbe.~n~n", []),
-%     askLineAndColumn(LineIn, ColumnIn),
-%     verifyMicrobeMovement(Board, OldLine, OldColumn, LineIn, ColumnIn, Line, Column).
-
-% verifyMicrobeMovement(Board, OldLine, OldColumn, LineIn, ColumnIn, LineIn, ColumnIn) :-
-%     checkValidMove(OldLine, OldColumn, LineIn, ColumnIn), % TO DO: fazer esta funcao
-%     LineDif is OldLine - LineIn,
-%     ColDif is OldColumn - ColumnIn,
-%     abs(LineDif) < 3, abs(ColDif) < 3,
-%     returnMicrobeInPos(LineIn, ColumnIn, Board, Microbe),
-%     Microbe = ' '.
-
-% verifyMicrobeMovement(Board, OldLine, OldColumn, LineIn, ColumnIn, Line, Column) :-
-%     format("~n~nInvalid position. Please, try again.~n~n", []),
-%     format("Please select a new position for that microbe.~n~n", []),
-%     askLineAndColumn(NewLineIn, NewColumnIn),
-%     verifyMicrobeMovement(Board, OldLine, OldColumn, NewLineIn, NewColumnIn, Line, Column).
 
 % ---------------------------------------------------------------------
 
