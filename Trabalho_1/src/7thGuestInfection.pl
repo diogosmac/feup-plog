@@ -1,7 +1,10 @@
 :- consult('mainCycle.pl').
 
-% Main cycle
+% <game cycle>
 
+% Main predicate that controls the flow of the game, updating
+% it as both players choose their moves until a winner is
+% determined
 play :-
     startGame,
     repeat,  
@@ -10,3 +13,5 @@ play :-
         once(saveState(NewBoard)),
     game_over(NewBoard, Winner),
     showWinnerAndReset(Winner).
+
+% </game cycle>
