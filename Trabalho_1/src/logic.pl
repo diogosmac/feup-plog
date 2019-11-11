@@ -26,7 +26,7 @@ handleIsAdjacent('no', OldLine, OldColumn, BoardIn, BoardOut) :-
     playMicrobe(OldLine, OldColumn, ' ', BoardIn, BoardOut).
 
 % -- -- Case where the move is executed towards an adjacent position
-handleIsAdjacent('yes', OldLine, OldColumn, Board, Board).
+handleIsAdjacent('yes', _, _, Board, Board).
 
 % </move execution>
 
@@ -56,7 +56,7 @@ contaminatePosition(MicrobeType, Line, Column, Board, NewBoard) :-
     playMicrobe(Line, Column, MicrobeType, Board, NewBoard).
 
 % -- -- Case where the position will not be contaminated
-contaminatePosition(MicrobeType, Line, Column, Board, Board).
+contaminatePosition(_, _, _, Board, Board).
 
 % </enemy piece contamination>
 
@@ -110,7 +110,7 @@ boardLineEndCheck(P, [Head | Tail]) :-
 
 % -- -- Case where the difficulty is set to level 1 (easy):
 % -- --     move has a random value
-value(1, Board, Player, Value) :-
+value(1, _, _, Value) :-
     random(0, 49, Value).
 
 % -- -- Case where the difficulty is set to level 2 (medium):
@@ -180,7 +180,7 @@ findMove(Player, BoardIn, BoardOut) :-
 % -- BestBoard - resulting board from the most advantageous move
 
 % -- -- Case where there are no available moves
-chooseBestBoard(Level, [], Player, Board, BestBoard) :-
+chooseBestBoard(_, [], _, _, _) :-
     printNoValidMoves.
 
 % -- -- Case where there are available moves
@@ -188,7 +188,7 @@ chooseBestBoard(Level, ListOfValidBoards, Player, Board, BestBoard) :-
     chooseBestBoardAux(Level, ListOfValidBoards, Player, -999999, Board, BestBoard).
 
 % -- End condition for the predicate, which iterates over the list of possible moves
-chooseBestBoardAux(Level, [], Player, AuxValue, AuxBoard, AuxBoard).
+chooseBestBoardAux(_, [], _, _, AuxBoard, AuxBoard).
 
 % -- Predicate that iterates over the list of possible moves, checking if the current
 % -- move is better than the previous best option, and returning the best move

@@ -40,7 +40,7 @@ verifyLineAndColumn(LineIn, ColumnIn, LineIn, ColumnIn) :-
     ColumnIn > 0, ColumnIn < 8.
 
 % -- -- Case where the given values are not valid
-verifyLineAndColumn(LineIn, ColumnIn, Line, Column) :-
+verifyLineAndColumn(_, _, Line, Column) :-
     format("~n~nInvalid inputs. Please, try again.~n~n", []),
     readInt('Insert the number of a line (1 to 7) ', NewLineIn),
     readInt('Insert the number of a column (1 to 7) ', NewColumnIn),
@@ -64,7 +64,7 @@ verifyMenuOption(OptionIn, OptionIn, Value1, Value2) :-
     OptionIn >= Value1, OptionIn =< Value2.
 
 % -- -- Case where the option is not valid
-verifyMenuOption(OptionIn, Option, Value1, Value2) :-
+verifyMenuOption(_, Option, Value1, Value2) :-
     format("~n~nInvalid inputs. Please, try again.~n~n", []),
     readInt('Option ', NewOptionIn),
     verifyMenuOption(NewOptionIn, Option, Value1, Value2).

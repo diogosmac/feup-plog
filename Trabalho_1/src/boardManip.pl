@@ -221,20 +221,20 @@ returnMicrobeInPos(Line, Column, Board, Microbe) :-
     analyzeLine(Line, Column, Board, Microbe).
 
 % -- End condition for the predicate, which iterates over the board
-analyzeLine(1, Column, [Line | More], Microbe) :-
+analyzeLine(1, Column, [Line | _], Microbe) :-
     analyzeColumn(Column, Line, Microbe).
 
 % -- Predicate that iterates over the board until it reaches the column to be queried
-analyzeLine(N, Column, [Line | More], Microbe) :-
+analyzeLine(N, Column, [_ | More], Microbe) :-
     N > 1,
     Next is N-1,
     analyzeLine(Next, Column, More, Microbe).
 
-% -- End condition for the prediate, which iterates over a column
-analyzeColumn(1, [Microbe | Rest], Microbe).
+% -- End condition for the predicate, which iterates over a column
+analyzeColumn(1, [Microbe | _], Microbe).
 
 % -- Predicate that iterates over a column, until it reaches the position to be queried
-analyzeColumn(N, [P | Rest], Microbe) :-
+analyzeColumn(N, [_ | Rest], Microbe) :-
     N > 1,
     Next is N - 1,
     analyzeColumn(Next, Rest, Microbe).
@@ -252,12 +252,12 @@ getPositionsForMicrobe(Microbe, Board, Line, Column) :-
 % -- a microbe of the requested type is present
 
 % -- -- Case where a microbe is found on the processed line
-getLineForMicrobe(Microbe, [L | Rest], LineAux, LineAux, ColumnAux) :-
+getLineForMicrobe(Microbe, [L | _], LineAux, LineAux, ColumnAux) :-
     LineAux < 8,
     getColumnForMicrobe(Microbe, L, 1, ColumnAux).
 
 % -- -- Case where a microbe is not found on the processed line
-getLineForMicrobe(Microbe, [L | Rest], LineAux, Line, Column) :-
+getLineForMicrobe(Microbe, [_ | Rest], LineAux, Line, Column) :-
     LineAux < 8,
     NextLine is LineAux + 1,
     getLineForMicrobe(Microbe, Rest, NextLine, Line, Column).
@@ -266,12 +266,12 @@ getLineForMicrobe(Microbe, [L | Rest], LineAux, Line, Column) :-
 % -- a microbe of the requested type is present
 
 % -- -- Case where a microbe is found on the processed position
-getColumnForMicrobe(Microbe, [Pos | Rest], ColumnAux, ColumnAux) :-
+getColumnForMicrobe(Microbe, [Pos | _], ColumnAux, ColumnAux) :-
     ColumnAux < 8,
     Microbe = Pos.
 
 % -- -- Case where a microbe is not found on the processed position
-getColumnForMicrobe(Microbe, [Pos | Rest], ColumnAux, Column) :-
+getColumnForMicrobe(Microbe, [_ | Rest], ColumnAux, Column) :-
     ColumnAux < 8,
     NextColumn is ColumnAux + 1,
     getColumnForMicrobe(Microbe, Rest, NextColumn, Column).

@@ -48,7 +48,7 @@ changeStateAux(Player, 'H', Board, NewBoard) :-
 % -- -- Predicate that checks whether there are moves the player can select
 
 % -- -- -- Case where there are no moves available (skips turn)
-checkValidMoves(Player, [], Board, Board) :-
+checkValidMoves(_, [], Board, Board) :-
     printNoValidMoves.
 
 % -- -- -- Case where there are available moves (asks the player until he selects a valid move)
