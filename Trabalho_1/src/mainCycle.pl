@@ -1,15 +1,6 @@
 :- consult('logic.pl').
 :- use_module(library(lists)).
 
-% <cycle repetition>
-
-% -- Recursive predicate that repeats a sequence until the sequence returns true
-repeat.
-repeat :-
-    repeat.
-
-% </cycle repetition>
-
 % <game initialization>
 
 % -- Predicate that displays the main menu, and asks the player for all the necessary information
@@ -45,6 +36,14 @@ changeStateAux(Player, 'H', Board, NewBoard) :-
     valid_moves(Player, Board, ListOfValidBoards),
     checkValidMoves(Player, ListOfValidBoards, Board, NewBoard).
 
+
+% -- -- Case where the player is controlled by the Computer
+% -- -- Obtains the difficulty level for the Computer controlled player, and chooses
+% -- -- the move based on it
+changeStateAux(Player, 'C', Board, NewBoard) :-
+    difficulty(Player, Level),
+    choose_move(Level, Player, Board, NewBoard).
+
 % -- -- Predicate that checks whether there are moves the player can select
 
 % -- -- -- Case where there are no moves available (skips turn)
@@ -69,13 +68,6 @@ handleMoveRepeat(Player, _, _, _, _, Board, NewBoard) :-
     handleMoveRepeat(Player, OldLine2, OldColumn2, NewLine2, NewColumn2, Board, NewBoard).
 
 
-
-% -- -- Case where the player is controlled by the Computer
-% -- -- Obtains the difficulty level for the Computer controlled player, and chooses
-% -- -- the move based on it
-changeStateAux(Player, 'C', Board, NewBoard) :-
-    difficulty(Player, Level),
-    choose_move(Level, Player, Board, NewBoard).
 
 % -- Predicate that saves the game state, for the next cycle, and calculates the next player to play
 saveState(Board) :-

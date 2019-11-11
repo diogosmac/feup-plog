@@ -1,7 +1,3 @@
-:- consult('input.pl').
-:- consult('print.pl').
-:- consult('boardManip.pl').
-:- consult('utility.pl').
 :- consult('logic.pl').
 :- use_module(library(lists)).
 
@@ -126,7 +122,7 @@ testGetPositions :-
 
 testValidMoves :-
     tabuleiroTeste(Board),
-    valid_moves('A', Board, ListOfValidBoards),
+    valid_moves('B', Board, ListOfValidBoards),
     length(ListOfValidBoards, Length),
     format("~n~n Valid moves: ~p~n~n", [Length]).
 

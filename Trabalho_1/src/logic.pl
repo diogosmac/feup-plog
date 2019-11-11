@@ -148,22 +148,56 @@ valid_moves(Player, Board, ListOfValidBoards) :-
 findMove(Player, BoardIn, BoardOut) :-
     getMicrobeType(Player, MicrobeType),
     getPositionsForMicrobe(MicrobeType, BoardIn, Line, Column),
-    ((AuxLine1 is Line - 2, AuxColumn1 is Column - 2, once(move(Player, Line, Column, AuxLine1, AuxColumn1, BoardIn, BoardOut)));
-     (AuxLine2 is Line - 2, AuxColumn2 is Column, once(move(Player, Line, Column, AuxLine2, AuxColumn2, BoardIn, BoardOut)));
-     (AuxLine3 is Line - 2, AuxColumn3 is Column + 2, once(move(Player, Line, Column, AuxLine3, AuxColumn3, BoardIn, BoardOut)));
-     (AuxLine4 is Line - 1, AuxColumn4 is Column - 1, once(move(Player, Line, Column, AuxLine4, AuxColumn4, BoardIn, BoardOut)));
-     (AuxLine5 is Line - 1, AuxColumn5 is Column, once(move(Player, Line, Column, AuxLine5, AuxColumn5, BoardIn, BoardOut)));
-     (AuxLine6 is Line - 1, AuxColumn6 is Column + 1, once(move(Player, Line, Column, AuxLine6, AuxColumn6, BoardIn, BoardOut)));
-     (AuxLine7 is Line, AuxColumn7 is Column - 2, once(move(Player, Line, Column, AuxLine7, AuxColumn7, BoardIn, BoardOut)));
-     (AuxLine8 is Line, AuxColumn8 is Column - 1, once(move(Player, Line, Column, AuxLine8, AuxColumn8, BoardIn, BoardOut)));
-     (AuxLine9 is Line, AuxColumn9 is Column + 1, once(move(Player, Line, Column, AuxLine9, AuxColumn9, BoardIn, BoardOut)));
-     (AuxLine10 is Line, AuxColumn10 is Column + 2, once(move(Player, Line, Column, AuxLine10, AuxColumn10, BoardIn, BoardOut)));
-     (AuxLine11 is Line + 1, AuxColumn11 is Column - 1, once(move(Player, Line, Column, AuxLine11, AuxColumn11, BoardIn, BoardOut)));
-     (AuxLine12 is Line + 1, AuxColumn12 is Column, once(move(Player, Line, Column, AuxLine12, AuxColumn12, BoardIn, BoardOut)));
-     (AuxLine13 is Line + 1, AuxColumn13 is Column + 1, once(move(Player, Line, Column, AuxLine13, AuxColumn13, BoardIn, BoardOut)));
-     (AuxLine14 is Line + 2, AuxColumn14 is Column - 2, once(move(Player, Line, Column, AuxLine14, AuxColumn14, BoardIn, BoardOut)));
-     (AuxLine15 is Line + 2, AuxColumn15 is Column, once(move(Player, Line, Column, AuxLine15, AuxColumn15, BoardIn, BoardOut)));
-     (AuxLine16 is Line + 2, AuxColumn16 is Column + 2, once(move(Player, Line, Column, AuxLine16, AuxColumn16, BoardIn, BoardOut)))).
+    generateValidPosition(Line, Column, LineOut, ColumnOut),
+    once(move(Player, Line, Column, LineOut, ColumnOut, BoardIn, BoardOut)).
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line - 2, ColumnOut is Column - 2.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line - 2, ColumnOut is Column.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line - 2, ColumnOut is Column + 2.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line - 1, ColumnOut is Column - 1.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line - 1, ColumnOut is Column.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line - 1, ColumnOut is Column + 1.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line, ColumnOut is Column - 2.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line, ColumnOut is Column - 1.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line, ColumnOut is Column + 1.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line, ColumnOut is Column + 2.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line + 1, ColumnOut is Column - 1.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line + 1, ColumnOut is Column.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line + 1, ColumnOut is Column + 1.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line + 2, ColumnOut is Column - 2.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line + 2, ColumnOut is Column.
+
+generateValidPosition(Line, Column, LineOut, ColumnOut) :-
+    LineOut is Line + 2, ColumnOut is Column + 2.
 
 % </cpu move generation>
 
