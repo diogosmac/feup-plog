@@ -1,3 +1,5 @@
+
+
 % <game state representation>
 
 % -- Predicate that displays the board, as well as each player's score, and
@@ -21,10 +23,10 @@ printBoard(Board) :-
     format("|-----|-----|-----|-----|-----|-----|-----|-----|~n", []),
     printBoardLine(1, Board).
 
-% -- End condition for the predicate, which iterates over the lines of the board
+% -- End condition for the predicate, which iterates over the board's lines
 printBoardLine(_, []).
 
-% -- Predicate that iterates over the lines of the board, displaying each of them
+% -- Predicate that iterates over the board's lines, displaying each of them
 printBoardLine(NumLine, [X | RestLines]) :-
     format("|  ~d  |", [NumLine]),
     format("  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |  ~p  |~n", X),

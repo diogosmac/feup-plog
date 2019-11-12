@@ -7,7 +7,19 @@
 % -- integer value
 readInt(Prompt, Number) :-
     write(Prompt), write('> '),
-    read(Number).
+    getNumberFromUser(Number).
+
+% -- Predicate that reads a number from the user
+getNumberFromUser(Number) :-
+    get_code(Ch),
+    once(getChars(Ch, Total)),
+    name(Number, Total).
+
+getChars(10, []).
+getChars(13, []).
+getChars(Ch, [Ch | More]) :-
+    get_code(Ch1),
+    getChars(Ch1, More).
 
 % </user integer input reading>
 
