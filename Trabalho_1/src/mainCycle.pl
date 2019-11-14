@@ -76,15 +76,10 @@ saveState(Board) :-
 
 % </game state manipulation>
 
-% <endgame procedures>
+% <game over check>
 
-% predicado que determina se o jogo ja tem um vencedor, verificando
-% as condicoes de vitoria:
-% - apenas existem pecas de uma das cores
-% - o tabuleiro esta completamente preenchido
-
-% -- Predicate that determines whether the game already has a winner, checking
-% -- the possible end conditions:
+% -- Predicate that determines whether the game already has a winner,
+% -- checking the possible end conditions:
 % -- - All pieces on the board belong to the same player
 % -- - The board is completely full
 game_over(Board, Winner) :-
@@ -101,8 +96,12 @@ game_over(Board, Winner) :-
     pointsB(B),
     declareWinner(A, B, Winner).
 
-% -- Predicate that shows the winner of the game, and resets the game state so that
-% -- a new game may be started
+% </game over check>
+
+% <endgame display>
+
+% -- Predicate that shows the winner of the game, and resets the game state
+% -- so that a new game may be started
 showWinnerAndReset(Winner) :-
     turn(Player),
     board(Board),
@@ -114,4 +113,4 @@ showWinnerAndReset(Winner) :-
     retractPlayerTypes,
     retractDifficulty.
 
-% </endgame procedures>
+% </endgame display>
