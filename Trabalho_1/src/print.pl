@@ -75,9 +75,9 @@ showWinner(Winner) :-
 
 % -- -- Case where the game ends in a draw
 showWinner(Winner) :-
-    Winner =:= 'draw',
+    Winner = 'draw',
     format("-----------------------------------------------------~n~n", []),
-    format("        The game ends in a draw!                 ~n~n", [Winner]),
+    format("               The game ends in a draw!              ~n~n", []),
     format("-----------------------------------------------------~n~n", []).
 
 % </endgame procedures>

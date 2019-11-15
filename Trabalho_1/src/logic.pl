@@ -4,8 +4,7 @@
 % <move execution>
 
 % -- Predicate that validates and executes a proposed play
-% -- Player - player who requested the move (important to know the type of
-% --          piece to move)
+% -- Player - player who requested the move (important to know the type of piece to move)
 % -- OldLine - Line of the position of the microbe that should be moved
 % -- OldColumn - Column of the position of the microbe that should be moved
 % -- NewLine - Line of the position to which the microbe should be moved
@@ -14,14 +13,13 @@
 % -- NewBoard - board where the changes to the game state are represented
 move(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard) :-
     getMicrobeType(Player, MicrobeType),
-    checkValidMove(MicrobeType, OldLine, OldColumn, 
-                   NewLine, NewColumn, Board, IsAdjacent),
+    checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdjacent),
     playMicrobe(NewLine, NewColumn, MicrobeType, Board, BoardOut),
     handleIsAdjacent(IsAdjacent, OldLine, OldColumn, BoardOut, BoardOut2),
     contaminateAdjacent(Player, NewLine, NewColumn, BoardOut2, NewBoard).
 
-% -- Predicate that distinguishes moves to adjacent positions, for the
-% -- application of the special rules for this kind of moves
+% -- Predicate that distinguishes moves to adjacent positions, for the application of the special
+% -- rules for this kind of moves
 
 % -- -- Case where the move is executed towards a non-adjacent position
 handleIsAdjacent('no', OldLine, OldColumn, BoardIn, BoardOut) :-
@@ -34,30 +32,21 @@ handleIsAdjacent('yes', _, _, Board, Board).
 
 % <enemy piece contamination>
 
-% -- Predicate that, given the position of the newly set piece, contaminates
-% -- the adjacent enemy pieces
+% -- Predicate that, given the position of the newly set piece, contaminates the
+% -- adjacent enemy pieces
 contaminateAdjacent(Player, Line, Column, Board, NewBoard) :-
     getMicrobeType(Player, MicrobeType),
-    AuxLine1 is Line - 1, AuxCol1 is Column - 1, 
-    contaminatePosition(MicrobeType, AuxLine1, AuxCol1, Board, BoardAux1),
-    AuxLine2 is Line - 1, AuxCol2 is Column, 
-    contaminatePosition(MicrobeType, AuxLine2, AuxCol2, BoardAux1, BoardAux2),
-    AuxLine3 is Line - 1, AuxCol3 is Column + 1, 
-    contaminatePosition(MicrobeType, AuxLine3, AuxCol3, BoardAux2, BoardAux3),
-    AuxLine4 is Line, AuxCol4 is Column - 1, 
-    contaminatePosition(MicrobeType, AuxLine4, AuxCol4, BoardAux3, BoardAux4),
-    AuxLine5 is Line, AuxCol5 is Column + 1, 
-    contaminatePosition(MicrobeType, AuxLine5, AuxCol5, BoardAux4, BoardAux5),
-    AuxLine6 is Line + 1, AuxCol6 is Column - 1, 
-    contaminatePosition(MicrobeType, AuxLine6, AuxCol6, BoardAux5, BoardAux6),
-    AuxLine7 is Line + 1, AuxCol7 is Column, 
-    contaminatePosition(MicrobeType, AuxLine7, AuxCol7, BoardAux6, BoardAux7),
-    AuxLine8 is Line + 1, AuxCol8 is Column + 1, 
-    contaminatePosition(MicrobeType, AuxLine8, AuxCol8, BoardAux7, NewBoard).
+    AuxLine1 is Line - 1, AuxCol1 is Column - 1, contaminatePosition(MicrobeType, AuxLine1, AuxCol1, Board, BoardAux1),
+    AuxLine2 is Line - 1, AuxCol2 is Column, contaminatePosition(MicrobeType, AuxLine2, AuxCol2, BoardAux1, BoardAux2),
+    AuxLine3 is Line - 1, AuxCol3 is Column + 1, contaminatePosition(MicrobeType, AuxLine3, AuxCol3, BoardAux2, BoardAux3),
+    AuxLine4 is Line, AuxCol4 is Column - 1, contaminatePosition(MicrobeType, AuxLine4, AuxCol4, BoardAux3, BoardAux4),
+    AuxLine5 is Line, AuxCol5 is Column + 1, contaminatePosition(MicrobeType, AuxLine5, AuxCol5, BoardAux4, BoardAux5),
+    AuxLine6 is Line + 1, AuxCol6 is Column - 1, contaminatePosition(MicrobeType, AuxLine6, AuxCol6, BoardAux5, BoardAux6),
+    AuxLine7 is Line + 1, AuxCol7 is Column, contaminatePosition(MicrobeType, AuxLine7, AuxCol7, BoardAux6, BoardAux7),
+    AuxLine8 is Line + 1, AuxCol8 is Column + 1, contaminatePosition(MicrobeType, AuxLine8, AuxCol8, BoardAux7, NewBoard).
 
 % -- Predicate that contaminates a position of the board, if it belongs to the
 % -- opposing player
-
 % -- -- Case where the position will be contaminated
 contaminatePosition(MicrobeType, Line, Column, Board, NewBoard) :-
     Line > 0, Line < 8,
@@ -73,8 +62,7 @@ contaminatePosition(_, _, _, Board, Board).
 
 % <endgame procedures>
 
-% -- Predicate that determines the winner, depending on the scores of both
-% -- players
+% -- Predicate that determines the winner, depending on the scores of both players
 
 % -- -- Case where player A has a higher score
 declareWinner(A, B, Winner) :-
@@ -103,8 +91,8 @@ boardEndCheck(P, [Line | Rest]) :-
 % -- End condition for the predicate, which iterates over a line of the board
 boardLineEndCheck(_, []).
 
-% -- Predicate that iterates over a line of the board, returning false if a
-% -- piece of the type P is found
+% -- Predicate that iterates over a line of the board, returning false if a piece
+% -- of the type P is found
 boardLineEndCheck(P, [Head | Tail]) :-
     Head \= P,
     boardLineEndCheck(P, Tail).
@@ -113,52 +101,56 @@ boardLineEndCheck(P, [Head | Tail]) :-
 
 % <move evaluation>
 
-% -- Predicate that evaluates the game state, returning a value to
-% -- characterize it
+% predicado que avalia o estado de jogo, retornando um numero value para o caracterizar.
+% dois niveis de dificuldade do computador:
+% 1 - value e gerado aleatoriamente, de modo a que o computador escolha uma jogada qualquer possivel
+% 2 - value e a diferenca de pecas dos jogadores, de modo a que o computador escolha (gananciosamente) a jogada que o poe mais em vantagem naquele turno
+
 
 % -- -- Case where the difficulty is set to level 1 (easy):
-% -- -- move has a random value
-value(1, _, _, Value) :-
-    random(0, 49, Value).
+% -- --     move has a random value
 
+% -- Predicate that evaluates the game state, returning a value to characterize it
 % -- -- Case where the difficulty is set to level 2 (medium):
-% -- -- move's value is equal to the piece advantage of the player who executes
-% -- -- the move (value can be negative!)
-value(2, Board, Player, Value) :-
+% -- --     move's value is equal to the piece advantage of the player who executes
+% -- --     the move (value can be negative!)
+value(Board, Player, Value) :-
     updatePoints(Board, 0, 0, PointsA, PointsB),
     valueAux(Player, Value, PointsA, PointsB).
 
-% -- Predicate that calculates the value of the play, based on the number of 
-% -- pieces on the board from each player
+% -- Predicate that calculates the value of the play, based on the number of pieces
+% -- on the board from each player
 
 % -- -- Case where player A executes the move
-valueAux(Player, Value, PointsA, PointsB) :-
-    Player = 'A', Value is PointsA-PointsB.
+valueAux('A', Value, PointsA, PointsB) :-
+    Value is PointsA-PointsB.
 
 % -- -- Case where player B executes the move
-valueAux(Player, Value, PointsA, PointsB) :-
-    Player = 'B', Value is PointsB-PointsA.
+valueAux('B', Value, PointsA, PointsB) :-
+    Value is PointsB-PointsA.
 
 % </move evaluation>
 
 % <cpu move generation>
 
-% -- Predicate that, using findall() with the findMove() predicate, generates
-% -- all possible resulting boards from the valid moves available to the 
-% -- player, returning them in a list
-valid_moves(Player, Board, ListOfValidBoards) :-
-    findall(BoardOut, findMove(Player, Board, BoardOut), ListOfValidBoards).
+% -- Predicate that, using findall() with the findMove() predicate, generates all possible
+% -- moves available to the player, returning them in a list
+valid_moves(Player, Board, ListOfValidMoves) :-
+    findall(OldLine-OldColumn-NewLine-NewColumn, findMove(Player, Board, OldLine, OldColumn, NewLine, NewColumn), ListOfValidMoves).
 
-% -- Predicate to be used by the Computer, which generates a possible move 
-% -- according to the board state
+% -- Predicate to be used by the Computer, which generates a possible move according
+% -- to the board state
 % -- Player - the player for which the move is generated
-% -- BoardIn - current state of the board
-% -- BoardOut - state of the board after the proposed move
-findMove(Player, BoardIn, BoardOut) :-
+% -- Board - current state of the board
+% -- OldLine - line of the microbe to be moved
+% -- OldColumn - column of the microbe to be moved
+% -- NewLine - line that the microbe should be moved to
+% -- NewColumn - column that the microbe should be moved to
+findMove(Player, Board, OldLine, OldColumn, NewLine, NewColumn) :-
     getMicrobeType(Player, MicrobeType),
-    getPositionsForMicrobe(MicrobeType, BoardIn, Line, Column),
-    generateValidPosition(Line, Column, LineOut, ColumnOut),
-    once(move(Player, Line, Column, LineOut, ColumnOut, BoardIn, BoardOut)).
+    getPositionsForMicrobe(MicrobeType, Board, OldLine, OldColumn),
+    generateValidPosition(OldLine, OldColumn, NewLine, NewColumn),
+    once(checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, _)).
 
 generateValidPosition(Line, Column, LineOut, ColumnOut) :-
     LineOut is Line - 2, ColumnOut is Column - 2.
@@ -212,54 +204,52 @@ generateValidPosition(Line, Column, LineOut, ColumnOut) :-
 
 % <cpu move selection>
 
-% -- Predicate that receives a list with all possible moves and, according to
-% -- the difficulty level, calls the value() predicate for each move, returning
-% -- in BestBoard the most advantageous board
-% -- If there are no available moves, the board remains the same, and the
-% -- move is skipped
+% -- Predicate that receives a list with all possible moves and, according to the difficulty
+% -- level, calls the value() predicate for each move, returning in BestMove the most
+% -- advantageous move
+% -- If there are no available moves, the move returned is (0, 0, 0, 0), and the turn is skipped
 % -- Level - difficulty level according to which the moves will be evaluated
-% -- ListOfValidBoards - list containing the resulting boards for each
-% --                     possible move
+% -- ListOfValidMoves - list containing each possible move
 % -- Player - player for which the moves are being computed
 % -- Board - board that represents the game state before any move is executed
-% -- BestBoard - resulting board from the most advantageous move
+% -- BestMove - the most advantageous move
+chooseBestMove(Level, ListOfValidMoves, Player, Board, movement(OldLine, OldColumn, NewLine, NewColumn)) :-
+    chooseBestMoveAux(Level, ListOfValidMoves, Player, -999999, Board, movement(0, 0, 0, 0), movement(OldLine, OldColumn, NewLine, NewColumn)).
 
-% -- -- Case where there are no available moves
-chooseBestBoard(_, [], _, _, _) :-
-    printNoValidMoves.
+% -- End condition for the predicate, which iterates over the list of possible moves
+chooseBestMoveAux(_, [], _, _, _, movement(OldLine, OldColumn, NewLine, NewColumn), movement(OldLine, OldColumn, NewLine, NewColumn)).
 
-% -- -- Case where there are available moves
-chooseBestBoard(Level, BoardList, Player, Board, BestBoard) :-
-    chooseBestBoardAux(Level, BoardList, Player, -999999, Board, BestBoard).
-
-% -- End condition for the predicate, which iterates over the 
-% -- list of possible moves
-chooseBestBoardAux(_, [], _, _, AuxBoard, AuxBoard).
-
-% -- Predicate that iterates over the list of possible moves, checking if the 
-% -- current move is better than the previous best option, and returning the 
-% -- best move available in the end
+% -- Predicate that iterates over the list of possible moves, checking if the current
+% -- move is better than the previous best option, and returning the best move
+% -- available in the end
 % -- Level - difficulty level to be passed to the value() predicate
-% -- [Board | Rest] - Head and Tail of the list of possible boards
+% -- [CurOldLine-CurOldColumn-CurNewLine-CurNewColumn | Rest] - Head and Tail of the
+% -- list of possible moves
 % -- Player - player for which the moves' value will be calculated
-% -- AuxValue - variable that will store the best value obtained at any point
-% --            during the iteration of the list
-% -- AuxBoard - variable that will store the board for which the value is 
-% --            highest at any point during the iteration of the list
-% -- BestBoard - field that will be returned with the board for which the 
-% --             value is highest in the list
-chooseBestBoardAux(Level, [Board | Rest], Player,
-                   AuxValue, AuxBoard, BestBoard) :-
-    value(Level, Board, Player, Value),
-    Value > AuxValue -> chooseBestBoardAux(Level, Rest, Player,
-                                           Value, Board, BestBoard);
-    chooseBestBoardAux(Level, Rest, Player, AuxValue, AuxBoard, BestBoard).
+% -- AuxValue - variable that will store the best value obtained at any point during
+% --            the iteration of the list
+% -- movement(AuxOldLine, AuxOldColumn, AuxNewLine, AuxNewColumn) - variable that will 
+% -- store the move for which the value is highest at any point during the iteration of the list
+% -- movement(OldLine, OldColumn, NewLine, NewColumn) - field that will be returned
+% -- with the move for which the value is highest in the list
 
-% -- Predicate to be used by the Computer, that creates all possible scenarios
-% -- and chooses, according to the difficulty level, the best possible move,
-% -- returning the resulting board
-choose_move(Level, Player, Board, NewBoard) :-
-    valid_moves(Player, Board, ListOfValidBoards),
-    chooseBestBoard(Level, ListOfValidBoards, Player, Board, NewBoard).
+% -- Level 1
+chooseBestMoveAux(1, [CurOldLine-CurOldColumn-CurNewLine-CurNewColumn | Rest], Player, AuxValue, Board, movement(AuxOldLine, AuxOldColumn, AuxNewLine, AuxNewColumn), movement(OldLine, OldColumn, NewLine, NewColumn)) :-
+    random(0, 100, Value),
+    Value > AuxValue -> chooseBestMoveAux(1, Rest, Player, Value, Board, movement(CurOldLine, CurOldColumn, CurNewLine, CurNewColumn), movement(OldLine, OldColumn, NewLine, NewColumn));
+    chooseBestMoveAux(1, Rest, Player, AuxValue, Board, movement(AuxOldLine, AuxOldColumn, AuxNewLine, AuxNewColumn), movement(OldLine, OldColumn, NewLine, NewColumn)).
+
+% -- Level 2
+chooseBestMoveAux(2, [CurOldLine-CurOldColumn-CurNewLine-CurNewColumn | Rest], Player, AuxValue, Board, movement(AuxOldLine, AuxOldColumn, AuxNewLine, AuxNewColumn), movement(OldLine, OldColumn, NewLine, NewColumn)) :-
+    move(Player, CurOldLine, CurOldColumn, CurNewLine, CurNewColumn, Board, AuxBoard),
+    value(AuxBoard, Player, Value),
+    Value > AuxValue -> chooseBestMoveAux(2, Rest, Player, Value, Board, movement(CurOldLine, CurOldColumn, CurNewLine, CurNewColumn), movement(OldLine, OldColumn, NewLine, NewColumn));
+    chooseBestMoveAux(2, Rest, Player, AuxValue, Board, movement(AuxOldLine, AuxOldColumn, AuxNewLine, AuxNewColumn), movement(OldLine, OldColumn, NewLine, NewColumn)).
+
+% -- Predicate to be used by the Computer, that creates all possible scenarios and chooses,
+% -- according to the difficulty level, the best possible move
+choose_move(Level, Player, Board, movement(OldLine, OldColumn, NewLine, NewColumn)) :-
+    valid_moves(Player, Board, ListOfValidMoves),
+    chooseBestMove(Level, ListOfValidMoves, Player, Board, movement(OldLine, OldColumn, NewLine, NewColumn)).
 
 % </cpu move selection>

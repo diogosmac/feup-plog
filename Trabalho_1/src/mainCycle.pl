@@ -25,48 +25,50 @@ changeState(Board, NewBoard) :-
     turn(Player),
     display_game(Board, Player),
     playerType(Player, PlayerType),
-    changeStateAux(Player, PlayerType, Board, NewBoard),
+    getMoveFromPlayer(Player, PlayerType, Board, movement(OldLine, OldColumn, NewLine, NewColumn)),
+    makeMove(Player, movement(OldLine, OldColumn, NewLine, NewColumn), Board, NewBoard),
     updatePointsNewBoard(NewBoard).
+
+
+% -- Predicate that applies the chosen movement to the board, generating a new one (verifies if the move is valid)
+
+% -- Special case; if the movement generated was (0, 0, 0, 0), then no valid move is available for the player and the turn is skiped
+makeMove(_, movement(0, 0, 0, 0), Board, Board) :-
+    printNoValidMoves, !.
+
+makeMove(Player, movement(OldLine, OldColumn, NewLine, NewColumn), Board, NewBoard) :-
+    move(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard), !.
+
+% -- will only fail if the player is human; asks again
+makeMove(Player, _, Board, NewBoard) :-
+    printInvalidMove,
+    askPlayerMove(Player, NextOldLine, NextOldColumn, NextNewLine, NextNewColumn),
+    makeMove(Player, movement(NextOldLine, NextOldColumn, NextNewLine, NextNewColumn), Board, NewBoard).
 
 % -- Predicate that processes the turn, depending on whether the player is Human or the Computer
 
 % -- -- Case where the player is Human
 % -- -- valid_moves() must be called, to check whether the human has a valid move to make
-changeStateAux(Player, 'H', Board, NewBoard) :-
-    valid_moves(Player, Board, ListOfValidBoards),
-    checkValidMoves(Player, ListOfValidBoards, Board, NewBoard).
+getMoveFromPlayer(Player, 'H', Board, movement(OldLine, OldColumn, NewLine, NewColumn)) :-
+    valid_moves(Player, Board, ListOfValidMoves),
+    checkValidMoves(Player, ListOfValidMoves, movement(OldLine, OldColumn, NewLine, NewColumn)).
 
 
 % -- -- Case where the player is controlled by the Computer
 % -- -- Obtains the difficulty level for the Computer controlled player, and chooses
 % -- -- the move based on it
-changeStateAux(Player, 'C', Board, NewBoard) :-
+getMoveFromPlayer(Player, 'C', Board, movement(OldLine, OldColumn, NewLine, NewColumn)) :-
     difficulty(Player, Level),
-    choose_move(Level, Player, Board, NewBoard).
+    choose_move(Level, Player, Board, movement(OldLine, OldColumn, NewLine, NewColumn)).
 
 % -- -- Predicate that checks whether there are moves the player can select
 
 % -- -- -- Case where there are no moves available (skips turn)
-checkValidMoves(_, [], Board, Board) :-
-    printNoValidMoves.
+checkValidMoves(_, [], movement(0, 0, 0, 0)).
 
-% -- -- -- Case where there are available moves (asks the player until he selects a valid move)
-checkValidMoves(Player, _, Board, NewBoard) :-
-    askPlayerMove(Player, OldLine, OldColumn, NewLine, NewColumn),
-    handleMoveRepeat(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard).
-
-% -- -- Predicate that checks the user's selected move
-
-% -- -- -- Case where the move is valid
-handleMoveRepeat(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard) :-
-    move(Player, OldLine, OldColumn, NewLine, NewColumn, Board, NewBoard).
-
-% -- -- -- Case where the move is not valid (asks again until a valid move is selected)
-handleMoveRepeat(Player, _, _, _, _, Board, NewBoard) :-
-    printInvalidMove,
-    askPlayerMove(Player, OldLine2, OldColumn2, NewLine2, NewColumn2),
-    handleMoveRepeat(Player, OldLine2, OldColumn2, NewLine2, NewColumn2, Board, NewBoard).
-
+% -- -- -- Case where there are available moves (asks the human to make a move)
+checkValidMoves(Player, _, movement(OldLine, OldColumn, NewLine, NewColumn)) :-
+    askPlayerMove(Player, OldLine, OldColumn, NewLine, NewColumn).
 
 
 % -- Predicate that saves the game state, for the next cycle, and calculates the next player to play
@@ -76,10 +78,15 @@ saveState(Board) :-
 
 % </game state manipulation>
 
-% <game over check>
+% <endgame procedures>
 
-% -- Predicate that determines whether the game already has a winner,
-% -- checking the possible end conditions:
+% predicado que determina se o jogo ja tem um vencedor, verificando
+% as condicoes de vitoria:
+% - apenas existem pecas de uma das cores
+% - o tabuleiro esta completamente preenchido
+
+% -- Predicate that determines whether the game already has a winner, checking
+% -- the possible end conditions:
 % -- - All pieces on the board belong to the same player
 % -- - The board is completely full
 game_over(Board, Winner) :-
@@ -96,12 +103,8 @@ game_over(Board, Winner) :-
     pointsB(B),
     declareWinner(A, B, Winner).
 
-% </game over check>
-
-% <endgame display>
-
-% -- Predicate that shows the winner of the game, and resets the game state
-% -- so that a new game may be started
+% -- Predicate that shows the winner of the game, and resets the game state so that
+% -- a new game may be started
 showWinnerAndReset(Winner) :-
     turn(Player),
     board(Board),
@@ -113,4 +116,4 @@ showWinnerAndReset(Winner) :-
     retractPlayerTypes,
     retractDifficulty.
 
-% </endgame display>
+% </endgame procedures>

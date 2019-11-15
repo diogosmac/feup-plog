@@ -1,29 +1,29 @@
 :- consult('logic.pl').
 :- use_module(library(lists)).
 
-% tabuleiroTeste(
-%     [
-%         [' ',' ',' ',' ',' ',' ',' '],
-%         [ a ,' ',' ',' ', a ,' ',' '],
-%         [' ',' ',' ',' ',' ',' ',' '],
-%         [' ', b ,' ', b , b ,' ',' '],
-%         [' ',' ',' ', b , b ,' ',' '],
-%         [ b ,' ', a , b , b ,' ',' '],
-%         [ b ,' ',' ', a , b , b , a ]
-%     ]
-% ).
-
 tabuleiroTeste(
     [
-        [ a , b , b ,' ',' ',' ',' '],
-        [ b , b , b ,' ',' ',' ',' '],
-        [ b , b , b ,' ',' ',' ',' '],
         [' ',' ',' ',' ',' ',' ',' '],
+        [ a ,' ',' ',' ', a ,' ',' '],
         [' ',' ',' ',' ',' ',' ',' '],
-        [' ',' ',' ',' ',' ',' ',' '],
-        [' ',' ',' ',' ',' ',' ',' ']
+        [' ', b ,' ', b , b ,' ',' '],
+        [' ',' ',' ', b , b ,' ',' '],
+        [ b ,' ', a , b , b ,' ',' '],
+        [ b ,' ',' ', a , b , b , a ]
     ]
 ).
+
+% tabuleiroTeste(
+%     [
+%         [ a , b , b ,' ',' ',' ',' '],
+%         [ b , b , b ,' ',' ',' ',' '],
+%         [ b , b , b ,' ',' ',' ',' '],
+%         [' ',' ',' ',' ',' ',' ',' '],
+%         [' ',' ',' ',' ',' ',' ',' '],
+%         [' ',' ',' ',' ',' ',' ',' '],
+%         [' ',' ',' ',' ',' ',' ',' ']
+%     ]
+% ).
 
 % ---------------------------------------------------------------------
 % funcoes de teste
@@ -122,8 +122,8 @@ testGetPositions :-
 
 testValidMoves :-
     tabuleiroTeste(Board),
-    valid_moves('B', Board, ListOfValidBoards),
-    length(ListOfValidBoards, Length),
+    valid_moves('A', Board, ListOfValidMoves),
+    length(ListOfValidMoves, Length),
     format("~n~n Valid moves: ~p~n~n", [Length]).
 
 
