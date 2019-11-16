@@ -21,9 +21,10 @@ checkValidMove(MicrobeType, OldLine, OldColumn, NewLine, NewColumn, Board, IsAdj
 % <move positions verification>
 
 % -- Predicate that validates the initial and final positions of a move. For
-% -- this to check out, the initial position must contain a piece from the player,
-% -- and the final position must be empty.
-verifyMicrobePositions(MicrobeType, Board, OldLine, OldColumn, NewLine, NewColumn) :-
+% -- this to check out, the initial position must contain a piece from the 
+% -- player, and the final position must be empty.
+verifyMicrobePositions(MicrobeType, Board, OldLine, 
+                       OldColumn, NewLine, NewColumn) :-
     OldLine > 0, OldLine < 8, OldColumn > 0, OldColumn < 8,
     NewLine > 0, NewLine < 8, NewColumn > 0, NewColumn < 8,
     returnMicrobeInPos(OldLine, OldColumn, Board, Microbe1), !,

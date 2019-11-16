@@ -54,8 +54,6 @@ testPedeLinhaEColuna :-
 
 testDisplayTab :-
     tabuleiroTeste(Tab),
-    % changePointsA(6),
-    % changePointsB(7),
     updatePointsNewBoard(Tab),
     display_game(Tab, 'A').
 
@@ -118,7 +116,7 @@ testContaminateAdjacent :-
 testGetPositions :-
     tabuleiroTeste(Board),
     display_game(Board, 'A'),
-    getPositionsForMicrobe(a, Board, Line, Column).
+    getPositionsForMicrobe(a, Board, _, _).
 
 testValidMoves :-
     tabuleiroTeste(Board),

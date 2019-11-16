@@ -1,5 +1,4 @@
 
-
 % <game state representation>
 
 % -- Predicate that displays the board, as well as each player's score, and
@@ -11,9 +10,11 @@ display_game(Board, Player) :-
     printBoard(Board),
     nl,
     format("          Player A         Player B           ~n", []),
-    format("            ~p                ~p              ~n", [PointsA, PointsB]),
+    format("            ~p                ~p              ~n",
+           [PointsA, PointsB]),
     nl,
-    format("           It is player ~ps turn.           ~n", [Player]),
+    format("           It is player ~ps turn.             ~n",
+           [Player]),
     format("----------------------------------------------~n", []).
 
 % -- Predicate that prints the current state of the board
