@@ -1,0 +1,3 @@
+pharmacy(10, 10.5, 10).
+pharmacy(10, 14, 55).
+pharmacy(13, 17, 24).
