@@ -8,7 +8,8 @@ main :-
     write('TruckCapacity: '), write(TruckCapacity), nl,
     write('NumOfTrucks: '), write(NumOfTrucks), nl, nl,
 
-    writeOutput(PharmaciesList).
+    writeOutput(PharmaciesList),
+    writeOutput2(DistancesList).
 
 writeOutput([]).
 
@@ -17,3 +18,10 @@ writeOutput([(StartTime-EndTime-Volume) | Rest]) :-
     write(' ; EndTime: '), write(EndTime),
     write(' ; Volume: '), write(Volume), nl,
     writeOutput(Rest).
+
+
+writeOutput2([]).
+
+writeOutput2([ArrayDistances | Rest]) :-
+    write(ArrayDistances), nl,
+    writeOutput2(Rest).

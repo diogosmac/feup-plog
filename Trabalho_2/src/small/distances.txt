@@ -1,2 +1,4 @@
-numOfPlaces(7).
-distances().
+distances([10, 20, 30]).
+distances([10, 10, 15]).
+distances([20, 10, 40]).
+distances([30, 15, 40]).

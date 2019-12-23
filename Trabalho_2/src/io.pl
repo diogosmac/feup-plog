@@ -1,7 +1,6 @@
 :- use_module(library(lists)).
 
 % --------------------------------------
-
 % predicate that will read from the files all the input needed
 readFiles(TrucksFile, TruckCapacity, NumOfTrucks, PharmaciesFile, PharmaciesList, DistancesFile, DistancesList) :-
     % read the truck capacity and the number of trucks from the trucks file
@@ -15,21 +14,19 @@ readFiles(TrucksFile, TruckCapacity, NumOfTrucks, PharmaciesFile, PharmaciesList
     close(Stream2),
 
     % read all distances from distances file
-    % open(DistancesFile, read, Stream3),
-    % readDistancesFile(Stream3, DistancesList),
-    % close(Stream3),
+    open(DistancesFile, read, Stream3),
+    readDistancesFile(Stream3, DistancesList),
+    close(Stream3),
 
     !.
 
 % --------------------------------------
-
 % reads input from truck file
 readTrucksFile(Stream, TruckCapacity, NumOfTrucks) :-
     read(Stream, trucks(TruckCapacity, NumOfTrucks)),
     !.
 
 % --------------------------------------
-
 % reads input from pharmacies file
 readPharmaciesFile(Stream, []) :-
     at_end_of_stream(Stream), !.
@@ -40,3 +37,11 @@ readPharmaciesFile(Stream, [(StartTime-EndTime-Volume) | Rest]) :-
     readPharmaciesFile(Stream, Rest).
 
 % --------------------------------------
+% reads input from distances file
+readDistancesFile(Stream, []) :-
+    at_end_of_stream(Stream), !.
+
+readDistancesFile(Stream, [DistanceArray | Rest]) :-
+    \+ at_end_of_stream(Stream),
+    read(Stream, distances(DistanceArray)),
+    readDistancesFile(Stream, Rest).
