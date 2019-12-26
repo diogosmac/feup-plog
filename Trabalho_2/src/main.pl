@@ -1,5 +1,6 @@
 :- use_module(library(lists)).
 :- consult('io.pl').
+:- consult('utils.pl').
 
 main :-
     readFiles('small/trucks.txt', TruckCapacity, NumOfTrucks, 'small/pharmacies.txt', PharmaciesList, 'small/distances.txt', DistancesList),
@@ -13,8 +14,9 @@ main :-
 
 writeOutput([]).
 
-writeOutput([(StartTime-EndTime-Volume) | Rest]) :-
-    write('StartTime: '), write(StartTime),
+writeOutput([(ID-StartTime-EndTime-Volume) | Rest]) :-
+    write('ID: '), write(ID),
+    write(' ; StartTime: '), write(StartTime),
     write(' ; EndTime: '), write(EndTime),
     write(' ; Volume: '), write(Volume), nl,
     writeOutput(Rest).
@@ -22,6 +24,8 @@ writeOutput([(StartTime-EndTime-Volume) | Rest]) :-
 
 writeOutput2([]).
 
-writeOutput2([ArrayDistances | Rest]) :-
-    write(ArrayDistances), nl,
+writeOutput2([(ID1-ID2-Time) | Rest]) :-
+    write('ID1: '), write(ID1),
+    write(' ; ID2: '), write(ID2),
+    write(' ; Time: '), write(Time), nl,
     writeOutput2(Rest).

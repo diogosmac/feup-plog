@@ -31,9 +31,9 @@ readTrucksFile(Stream, TruckCapacity, NumOfTrucks) :-
 readPharmaciesFile(Stream, []) :-
     at_end_of_stream(Stream), !.
 
-readPharmaciesFile(Stream, [(StartTime-EndTime-Volume) | Rest]) :-
+readPharmaciesFile(Stream, [(ID-StartTime-EndTime-Volume) | Rest]) :-
     \+ at_end_of_stream(Stream),
-    read(Stream, pharmacy(StartTime, EndTime, Volume)),
+    read(Stream, pharmacy(ID, StartTime, EndTime, Volume)),
     readPharmaciesFile(Stream, Rest).
 
 % --------------------------------------
@@ -41,7 +41,7 @@ readPharmaciesFile(Stream, [(StartTime-EndTime-Volume) | Rest]) :-
 readDistancesFile(Stream, []) :-
     at_end_of_stream(Stream), !.
 
-readDistancesFile(Stream, [DistanceArray | Rest]) :-
+readDistancesFile(Stream, [(Source-Dest-Time) | Rest]) :-
     \+ at_end_of_stream(Stream),
-    read(Stream, distances(DistanceArray)),
+    read(Stream, distance(Source, Dest, Time)),
     readDistancesFile(Stream, Rest).
