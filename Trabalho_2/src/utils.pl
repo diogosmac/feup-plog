@@ -1,4 +1,5 @@
 :- use_module(library(lists)).
+:- use_module(library(clpfd)).
 
 % --------------------------------------
 % predicate that will return the time needed to get from point 1 to point 2, in hours

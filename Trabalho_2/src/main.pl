@@ -1,4 +1,5 @@
 :- use_module(library(lists)).
+:- use_module(library(clpfd)).
 :- consult('io.pl').
 :- consult('utils.pl').
 
