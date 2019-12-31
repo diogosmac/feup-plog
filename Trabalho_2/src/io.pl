@@ -41,7 +41,7 @@ readPharmaciesFile(Stream, [(ID-StartTime-EndTime-Volume) | Rest]) :-
 readDistancesFile(Stream, []) :-
     at_end_of_stream(Stream), !.
 
-readDistancesFile(Stream, [(Source-Dest-Time) | Rest]) :-
+readDistancesFile(Stream, [DistancesArray | Rest]) :-
     \+ at_end_of_stream(Stream),
-    read(Stream, distance(Source, Dest, Time)),
+    read(Stream, distance(DistancesArray)),
     readDistancesFile(Stream, Rest).

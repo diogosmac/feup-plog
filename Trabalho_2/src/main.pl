@@ -4,7 +4,7 @@
 :- consult('utils.pl').
 :- consult('test.pl').
 
-main(L, D) :-
+main :-
     readFiles('small/trucks.txt', TruckCapacity, NumOfTrucks, 'small/pharmacies.txt', PharmaciesList, 'small/distances.txt', DistancesList),
 
     length(PharmaciesList, Length),
