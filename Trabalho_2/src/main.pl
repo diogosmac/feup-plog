@@ -4,9 +4,13 @@
 :- consult('utils.pl').
 :- consult('test.pl').
 
-main :-
+main(L, D) :-
     readFiles('small/trucks.txt', TruckCapacity, NumOfTrucks, 'small/pharmacies.txt', PharmaciesList, 'small/distances.txt', DistancesList),
 
     length(PharmaciesList, Length),
     initDeliveriesArray(DeliveriesList, Length),
-    write(DeliveriesList).
+
+    parte1(DistancesList, List, Dist),
+
+    write('Visits pharmacies by order '), write(List), nl,
+	write('Spends a total of '), write(Dist), write(' minutes').
