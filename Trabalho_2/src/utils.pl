@@ -22,23 +22,23 @@ initDeliveriesArrayAux([(StartTime-EndTime-IDTruck-IDSource) | Rest], N, Length)
 
 % ---------------------------------------
 % PART 1 - REGULAR TSP
-% part1([First | Rest], List, Dist) :-
-%     length(First, NumLocals), % see length of first sub-array in order to calculate number of locals (pharmacies + central)
-%     DistancesList = [First | Rest],
-%     length(List, NumLocals), 
-%     domain(List, 1, NumLocals),
-%     constrain_dists(DistancesList, List, CostList), % returns array with all the distance costs
-%     sum(CostList, #=, Dist), % sums final times
-%     circuit(List), % does circuit
-%     labeling([minimize(Dist)], List). % solves, trying to minimize time/distance
+part1([First | Rest], List, Dist) :-
+    length(First, NumLocals), % see length of first sub-array in order to calculate number of locals (pharmacies + central)
+    DistancesList = [First | Rest],
+    length(List, NumLocals), 
+    domain(List, 1, NumLocals),
+    constrain_dists(DistancesList, List, CostList), % returns array with all the distance costs
+    sum(CostList, #=, Dist), % sums final times
+    circuit(List), % does circuit
+    labeling([minimize(Dist)], List). % solves, trying to minimize time/distance
 
 
-% constrain_dists([], [], []).
+constrain_dists([], [], []).
 
-% constrain_dists([Array | DistancesList], [Local | Rest], [NewCost | CostList]) :-
-%     element(Local, Array, NewCostAux),
-%     NewCost #= NewCostAux + 30, % distance from point A to B, plus 30 mins for delivery
-%     constrain_dists(DistancesList, Rest, CostList).
+constrain_dists([Array | DistancesList], [Local | Rest], [NewCost | CostList]) :-
+    element(Local, Array, NewCostAux),
+    NewCost #= NewCostAux + 30, % distance from point A to B, plus 30 mins for delivery
+    constrain_dists(DistancesList, Rest, CostList).
 
 % ---------------------------------------
 % PART 2 - TSP WITH TIME WINDOWS - all times in minutes
@@ -102,7 +102,6 @@ putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
     member((Count-Start-End-_), PharmaciesList),
     StartMinutes is floor(Start * 60),
     EndMinutesWithDelivery is floor(End * 60) - 30, % removing half an hour to the end of the domain, to make time for the delivery (30 minutes)
-    % write(StartMinutes), write(' '), write(EndMinutesWithDelivery), nl,
     Time in StartMinutes .. EndMinutesWithDelivery, % domain of the start time
     NewCount is Count + 1,
     putTimeDomainAux(Rest, NewCount, PharmaciesList).
