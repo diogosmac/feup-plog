@@ -45,3 +45,32 @@ readDistancesFile(Stream, [DistancesArray | Rest]) :-
     \+ at_end_of_stream(Stream),
     read(Stream, distance(DistancesArray)),
     readDistancesFile(Stream, Rest).
+
+
+% --------------------------------------
+% writes minutes value in hours, in a readable format
+write_minutes(TotalMinutes) :-
+    Hours is TotalMinutes // 60,
+    Minutes is TotalMinutes mod 60,
+    if_then_else((Hours >= 10), (write(Hours)), (write('0'), write(Hours))), 
+    write(':'), 
+    if_then_else((Minutes >= 10), (write(Minutes)), (write('0'), write(Minutes))).
+
+
+if_then_else(C, I, _):- C, !, I.
+if_then_else(_, _, E):- E.
+
+% --------------------------------------
+% prints all minute values from a list
+print_start_times(StartTimesList) :-
+    write('['),
+    print_start_times_aux(StartTimesList).
+
+print_start_times_aux([LastValue]) :-
+    write_minutes(LastValue),
+    write(']').
+
+print_start_times_aux([Minutes | StartTimesList]) :-
+    write_minutes(Minutes),
+    write(','),
+    print_start_times_aux(StartTimesList).

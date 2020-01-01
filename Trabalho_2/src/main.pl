@@ -10,7 +10,10 @@ main :-
     length(PharmaciesList, Length),
     initDeliveriesArray(DeliveriesList, Length),
 
-    parte1(DistancesList, List, Dist),
+    part2(DistancesList, PharmaciesList, OrderList, StartTimesList, Cost),
 
-    write('Visits pharmacies by order '), write(List), nl,
-	write('Spends a total of '), write(Dist), write(' minutes').
+    nl, write('----------------------'), nl, nl,
+
+    write('Visits pharmacies by order '), write(OrderList), nl,
+    write('The start times are '), print_start_times(StartTimesList), nl,
+	write('Spends a total of '), write(Cost), write(' minutes').
