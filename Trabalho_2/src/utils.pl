@@ -62,7 +62,6 @@ part2([First | Rest], PharmaciesList, OrderList, StartTimesList, Cost) :-
     sum(CostList, #=, Cost), % sums final times
     circuit(OrderList), % does circuit
     append(OrderList, StartTimesList, AllVars),
-    write('labeling'), nl,
     labeling([minimize(Cost)], AllVars), % solves, trying to minimize time/distance
 
     fd_statistics.
