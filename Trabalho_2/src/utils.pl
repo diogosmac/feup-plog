@@ -105,3 +105,13 @@ putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
     Time in StartMinutes .. EndMinutesWithDelivery, % domain of the start time
     NewCount is Count + 1,
     putTimeDomainAux(Rest, NewCount, PharmaciesList).
+
+
+% ---------------------------------------
+% PART 3 - VEHICLE ROUTING PROBLEM WITH TIME WINDOWS
+part3([First | Rest], PharmaciesList, TruckCapacity, NumOfTrucks, OrderList, StartTimesList, Cost) :-
+    length(PharmaciesList, NumPharmacies),
+    length(RoutesArray, NumPharmacies),
+
+    NumRoutes is NumOfTrucks + 1, % one route per vehicle + unassigned route
+    domain(RoutesArray, 1, NumRoutes),

@@ -16,4 +16,4 @@ main :-
 
     write('Visits pharmacies by order '), write(OrderList), nl,
     write('The start times are '), print_start_times(StartTimesList), nl,
-	write('Spends a total of '), write(Cost), write(' minutes').
+	write('Spends a total of '), write(Cost), write(' minutes in trips').
