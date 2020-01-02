@@ -1,8 +1,8 @@
 :- use_module(library(clpfd)).
 :- use_module(library(lists)).
 
-prod_maquinas(List, Profit) :-
-    length(List, NaoSei),
+prod_maquinas(List, Profit, TimeMachineA, TimeMachineB) :-
+    length(List, 3),
     domain(List, 1, 2),
     automaton(List, _, List,
              [source(q0), sink(qa), sink(qb)], % 1 = a, 2 = b
@@ -15,6 +15,7 @@ prod_maquinas(List, Profit) :-
              arc(qa, 2, qb, [A + 2, B + 3, L + 10])
              ],
              [A, B, L], [0, 0, 0], [TimeMachineA, TimeMachineB, Profit]),
+
 
              TimeMachineA #=< 8, TimeMachineB #=< 7,
 
