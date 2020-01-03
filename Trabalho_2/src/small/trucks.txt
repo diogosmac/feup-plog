@@ -1,1 +1,4 @@
-trucks(100, 3).
+numTrucks(3).
+truck(100).
+truck(150).
+truck(200).

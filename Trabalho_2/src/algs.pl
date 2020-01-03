@@ -1,30 +1,18 @@
 :- use_module(library(lists)).
 :- use_module(library(clpfd)).
 :- consult('io.pl').
-
-% --------------------------------------
-% predicate that will return the time needed to get from point 1 to point 2, in hours
-getTime(P1, P2, Array, Hours) :-
-    member((P1-P2-Minutes), Array),
-    Hours is Minutes / 60.
-
-% --------------------------------------
-% predicates that initiates the deliveries array, in the form (StartTime - EndTime - IDTruck - IDSource)
-initDeliveriesArray(DeliveriesList, Length) :-
-    initDeliveriesArrayAux(DeliveriesList, 0, Length).
-
-initDeliveriesArrayAux([], Length, Length) :- !.
-
-% initDeliveriesArrayAux([(StartTime-EndTime-IDTruck-IDSource) | Rest], N, Length) :-
-%     Next is N + 1,
-%     initDeliveriesArrayAux(Rest, Next, Length).
-
-initDeliveriesArrayAux([(_-_-_-_) | Rest], N, Length) :-
-    Next is N + 1,
-    initDeliveriesArrayAux(Rest, Next, Length).
+:- consult('timer.pl').
 
 % ---------------------------------------
 % PART I - REGULAR TSP
+
+% variables:
+% - array of successors [sc, s2, s3, ..., si] - pharmacy/delivery done after i (c is central)
+% - total distance/time spent on travels (variable to be minimized)
+
+% inputs:
+% - time/distances matrix, between each pair of locals (pharmacies and central)
+
 part1([First | Rest], List, Dist) :-
     length(First, NumLocals), % see length of first sub-array in order to calculate number of locals (pharmacies + central)
     DistancesList = [First | Rest],
@@ -33,7 +21,12 @@ part1([First | Rest], List, Dist) :-
     constrain_dists(DistancesList, List, CostList), % returns array with all the distance costs
     sum(CostList, #=, Dist), % sums final times
     circuit(List), % does circuit
-    labeling([minimize(Dist)], List). % solves, trying to minimize time/distance
+
+    reset_timer,
+    labeling([minimize(Dist)], List), % solves, trying to minimize time/distance
+    print_time,
+
+    fd_statistics.
 
 
 constrain_dists([], [], []).
@@ -47,8 +40,13 @@ constrain_dists([Array | DistancesList], [Local | Rest], [NewCost | CostList]) :
 % PART II - TSP WITH TIME WINDOWS - all times in minutes
 
 % variables:
-% - array of sucessors [sc, s2, s3, ..., si] - pharmacy/delivery done after i (c is central)
+% - array of successors [sc, s2, s3, ..., si] - pharmacy/delivery done after i (c is central)
 % - array of start times [tc, t2, t3, ..., ti] - time at which the service begins in pharmacy i (central appears twice)
+% - total distance/time spent on travels (variable to be minimized)
+
+% inputs:
+% - time/distances matrix, between each pair of locals (pharmacies and central)
+% - time window for each pharmacy
 
 part2([First | Rest], PharmaciesList, OrderList, StartTimesList, Cost) :-
     length(First, NumLocals), % see length of first sub-array in order to calculate number of locals (pharmacies + central)
@@ -60,12 +58,16 @@ part2([First | Rest], PharmaciesList, OrderList, StartTimesList, Cost) :-
     domain(OrderList, 1, NumLocals),
     putTimeDomain(StartTimesList, PharmaciesList),
 
-    generate_constraints(DistancesList, 1, StartTimesList, OrderList, CostList, NumTimes), % returns array with all the distance costs, and constraints all the start time
+    generate_constraints(DistancesList, 1, StartTimesList, OrderList, CostList, NumTimes), 
+    % returns array with all the distance costs, and constraints all the start times
 
     sum(CostList, #=, Cost), % sums final times
     circuit(OrderList), % does circuit
     append(OrderList, StartTimesList, AllVars),
+    
+    reset_timer,
     labeling([minimize(Cost)], AllVars), % solves, trying to minimize time/distance
+    print_time,
 
     fd_statistics.
 
@@ -89,9 +91,6 @@ generate_constraints([Array | DistancesMatrix], Counter, StartTimesList, [Local 
 
     NewCounter is Counter + 1,
     generate_constraints(DistancesMatrix, NewCounter, StartTimesList, Rest, CostList, NumTimes).
-
-% nao esquecer de passar para horas os tempos na matriz
-% queremos minimizar a distancia/tempo percorrido, logo os 30 mins nao devem ser considerados no Cost da otimizacao
 
 putTimeDomain([Time | Rest], PharmaciesList) :-
     Time is 600, % time at when service starts at central (10 AM always)
@@ -110,61 +109,76 @@ putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
 
 % ---------------------------------------
 % Part III - TSP WITH TIME WINDOWS, WHILE ALLOCATING DELIVERIES TO THE AVAILABLE VEHICLES
+% THIS IS THE PART USED BY THE MAIN PROGRAM
 
 % variables:
 % - array of sucessors [sc, s2, s3, ..., si] - pharmacy/delivery done after i (c is central)
 % - array of start times [tc, t2, t3, ..., ti] - time at which the service begins in pharmacy i (central appears twice)
 % - array of deliveries [d1, d2, ..., di] - vehicle which will be assigned to the delivery i
+% - variable dependent on the total distance/time spent on travels, and the number of vehicles used (variable to be minimized)
 
-part3([First | Rest], TruckCapacity, NumOfTrucks, PharmaciesList, OrderList, StartTimesList, DeliveriesList, TimeCost) :-
+% inputs:
+% - time/distances matrix, between each pair of locals (pharmacies and central)
+% - time window for each pharmacy
+% - product quantity that each pharmacy requires
+% - maximum capacity of each vehicle
+
+part3([First | Rest], TruckCapacityList, NumOfTrucks, PharmaciesList, OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles) :-
     length(First, NumLocals), % see length of first sub-array in order to calculate number of locals (pharmacies + central)
     DistancesList = [First | Rest],
     length(OrderList, NumLocals), % variable list of orders has length equal to the number of locals 
     NumTimes is NumLocals + 1,
-    length(StartTimesList, NumTimes), % variable list of times has length equal to the number of locals + 1 (central appears twice) 
-
+    length(StartTimesList, NumTimes), % variable list of times has length equal to the number of locals + 1 (central appears twice)
 	length(PharmaciesList, NumPharmacies),
 	length(DeliveriesList, NumPharmacies), % list with one element for each pharmacy
 
     domain(OrderList, 1, NumLocals),
     putTimeDomain(StartTimesList, PharmaciesList),
-	domain(DeliveriesList, 1, NumOfTrucks),
-	ExitIndex is NumLocals + 1,
-	generateTasks(PharmaciesList, 2, ExitIndex, DeliveriesList, Tasks),
-	generateMachines(1, NumOfTrucks, TruckCapacity, Machines),
+	domain(DeliveriesList, 1, NumOfTrucks), % the value of each delivery element represents the vehicle that did it
 	
-	cumulatives(Tasks, Machines, [bound(upper)]),
+    ExitIndex is NumLocals + 1,
+	generateTasks(PharmaciesList, 2, ExitIndex, DeliveriesList, Tasks), % generate the tasks (deliveries to be made)
+	generateMachines(1, TruckCapacityList, Machines), % generate the machines (vehicles that can be assigned to deliveries)
+
+	cumulatives(Tasks, Machines, [bound(upper)]), % associate each delivery (task) with a vehicle (machine)
 
     generate_constraints(DistancesList, 1, StartTimesList, OrderList, CostList, NumTimes), 
-	% returns array with all the distance costs, and constraints all the start time
+	% returns array with all the distance costs, and constraints all the start times
 
     sum(CostList, #=, TimeCost), % sums final times
-	nvalue(DifferentVehicles, DeliveriesList),
+	nvalue(DifferentVehicles, DeliveriesList), % gets the number of different vehicles used to make the deliveries
 
-	Cost #= TimeCost + (10 * DifferentVehicles),
+	Cost #= TimeCost + (10 * DifferentVehicles), % cost function, envolving the sum of time spent traveling and the number of different vehicles used
 
     circuit(OrderList), % does circuit
 	Sol = [OrderList, StartTimesList, DeliveriesList],
     append(Sol, AllVars),
-    labeling([minimize(Cost)], AllVars), % solves, trying to minimize time/distance
+
+
+    reset_timer,
+    labeling([minimize(TimeCost)], AllVars), % solves, trying to minimize time/distance
+    % labeling([minimize(Cost)], AllVars), % solves, trying to minimize time/distance and number of vehicles used    
+    print_time,
+
     fd_statistics.
 
 
 generateTasks(_, Last, Last, _, []).
 generateTasks(PharmaciesList, Counter, ExitIndex, DeliveriesList, [task(1, 1, _, Quantity, DeliveryVehicle) | Tasks]) :-
-	member((Counter-_-_-Quantity), PharmaciesList),
+	member((Counter-_-_-Quantity), PharmaciesList), % gets the needed quantity for that pharmacy
 
 	DeliveryPos is Counter - 1,
-	element(DeliveryPos, DeliveriesList, DeliveryVehicle),
+	element(DeliveryPos, DeliveriesList, DeliveryVehicle), % associates the variable with the machine (vehicle) that will be assigned to the task (delivery)
 
 	NewCounter is Counter + 1,
 	generateTasks(PharmaciesList, NewCounter, ExitIndex, DeliveriesList, Tasks).
 
 
-generateMachines(Last, Last, TruckCapacity, [machine(Last, TruckCapacity)]).
-generateMachines(Counter, ExitIndex, TruckCapacity, [machine(Counter, TruckCapacity) | Machines]) :-
+% each vehicle corresponds to a machine (each machine has capacity equal to the capacity of each truck)
+generateMachines(_, [], []).
+generateMachines(Counter, [TruckCap | Rest], [machine(Counter, TruckCap) | Machines]) :-
 	NewCounter is Counter + 1,
-	generateMachines(NewCounter, ExitIndex, TruckCapacity, Machines).
+	generateMachines(NewCounter, Rest, Machines).
 
 
 generate_constraints([], _, _, [], [], _).
@@ -187,9 +201,6 @@ generate_constraints([Array | DistancesMatrix], Counter, StartTimesList, [Local 
     NewCounter is Counter + 1,
     generate_constraints(DistancesMatrix, NewCounter, StartTimesList, Rest, CostList, NumTimes).
 
-% nao esquecer de passar para horas os tempos na matriz
-% queremos minimizar a distancia/tempo percorrido, logo os 30 mins nao devem ser considerados no Cost da otimizacao
-
 putTimeDomain([Time | Rest], PharmaciesList) :-
     Time is 600, % time at when service starts at central (10 AM always)
     putTimeDomainAux(Rest, 2, PharmaciesList). % pharmacy ID starts at 2 (ID 1 is central)
@@ -206,11 +217,9 @@ putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
     putTimeDomainAux(Rest, NewCount, PharmaciesList).
 
 
-
-
-
 % ---------------------------------------
-% TENTATIVA DE IMPLEMENTAÇÃO DO MODELO TEÓRICO CONCEBIDO PARA A RESOLUÇÃO DO PROBLEMA (VRP-TW)
+% ATTEMPT OF IMPLEMENTATION OF THE THEORETICAL MODEL BUILT FOR THE RESOLUTION OF THE PROBLEM:
+% VEHICLE ROUTING PROBLEM WITH TIME WINDOWS
 
 % vrpTW(TruckCapacity, NumOfTrucks, PharmaciesList, [FirstDistances | Rest],
 % 		PredecessorsList, SuccessorsList, PharmacyVehiclesList, 

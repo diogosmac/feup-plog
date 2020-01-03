@@ -2,10 +2,10 @@
 
 % --------------------------------------
 % predicate that will read from the files all the input needed
-readFiles(TrucksFile, TruckCapacity, NumOfTrucks, PharmaciesFile, PharmaciesList, DistancesFile, DistancesList) :-
-    % read the truck capacity and the number of trucks from the trucks file
+readFiles(TrucksFile, TruckCapacityList, NumOfTrucks, PharmaciesFile, PharmaciesList, DistancesFile, DistancesList) :-
+    % read the truck capacities and the number of trucks from the trucks file
     open(TrucksFile, read, Stream),
-    readTrucksFile(Stream, TruckCapacity, NumOfTrucks),
+    readTrucksFile(Stream, TruckCapacityList, NumOfTrucks),
     close(Stream),
 
     % generate a tuple (StartTime-EndTime-Volume) for each pharmacy, reading the pharmacies file
@@ -22,9 +22,17 @@ readFiles(TrucksFile, TruckCapacity, NumOfTrucks, PharmaciesFile, PharmaciesList
 
 % --------------------------------------
 % reads input from truck file
-readTrucksFile(Stream, TruckCapacity, NumOfTrucks) :-
-    read(Stream, trucks(TruckCapacity, NumOfTrucks)),
-    !.
+readTrucksFile(Stream, TruckCapacityList, NumOfTrucks) :-
+    \+ at_end_of_stream(Stream),
+    read(Stream, numTrucks(NumOfTrucks)),
+    readTrucksFileAux(Stream, TruckCapacityList).
+
+readTrucksFileAux(Stream, []) :-
+    at_end_of_stream(Stream), !.
+
+readTrucksFileAux(Stream, [TruckCap | Rest]) :-
+    read(Stream, truck(TruckCap)),
+    readTrucksFileAux(Stream, Rest).
 
 % --------------------------------------
 % reads input from pharmacies file
@@ -74,3 +82,39 @@ print_start_times_aux([Minutes | StartTimesList]) :-
     write_minutes(Minutes),
     write(','),
     print_start_times_aux(StartTimesList).
+
+% --------------------------------------
+% predicates that print, in a readable format, all the output from the main program
+print_output_short(OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles) :-
+    write('Output resumed: '), nl, nl,
+    write('Visits pharmacies by order '), write(OrderList), nl,
+    write('The start times are '), print_start_times(StartTimesList), nl,
+	write('Spends a total of '), write(TimeCost), write(' minutes in trips'), nl,
+	write('The vehicles assigned to each delivery are '), write(DeliveriesList), nl,
+    write(DifferentVehicles), write(' different vehicles were used'), nl, nl.
+
+
+print_output(OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles) :-
+    nl, write('----------------------'), nl, nl,
+    write('Total time spent on trips: '), write(TimeCost), write(' minutes'), nl,
+    write(DifferentVehicles), write(' different vehicles were used'), nl, nl,
+    print_output_lists(OrderList, StartTimesList, DeliveriesList),
+    nl, nl, write('----------------------'), nl, nl,
+    print_output_short(OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles).
+
+print_output_lists([First | OrderList], [FirstTime | StartTimesList], DeliveriesList) :-
+    write('Leaving the central (local 1), at time '), write_minutes(FirstTime), write('; leaving for local '), write(First), nl, nl,
+    write('-----'), nl, nl,
+    print_output_lists_aux(OrderList, StartTimesList, DeliveriesList, 2).
+
+print_output_lists_aux([], [LastTime], [], _) :-
+    write('Arriving at central at time '), write_minutes(LastTime).
+
+print_output_lists_aux([NextLocal | OrderList], [StartTime | StartTimesList], [Vehicle | DeliveriesList], Counter) :-
+    write('Pharmacy '), write(Counter), write(':'), nl, nl,
+    write('Delivery starts at '), write_minutes(StartTime), nl,
+    write('Delivery done by vehicle '), write(Vehicle), nl,
+    write('Next local in route is '), write(NextLocal), nl, nl,
+    write('-----'), nl, nl,
+    NewCounter is Counter + 1,
+    print_output_lists_aux(OrderList, StartTimesList, DeliveriesList, NewCounter).

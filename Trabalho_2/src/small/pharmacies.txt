@@ -1,3 +1,3 @@
 pharmacy(2, 11, 11.5, 10).
 pharmacy(3, 10, 14, 55).
-pharmacy(4, 13, 17, 44).
+pharmacy(4, 13, 17, 190).
