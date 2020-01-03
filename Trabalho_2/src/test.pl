@@ -69,3 +69,20 @@ dist([_], 0).
 dist([A,B|T], D):-
 	dist([B|T], D2),
 	D #= D2 + abs(A-B).
+
+schedule(Vs, DifferentVehicles) :-
+	Vs= [V1,V2,V3],
+	Tasks = [
+		task(1, 1, _, 10,  V1),
+		task(1, 1, _, 55,  V2),
+		task(1, 1, _, 40,  V3)
+	],
+	Machines = [
+		machine(1,100),
+		machine(2,100),
+		machine(3,100)
+	],
+	domain(Vs, 1, 3),
+	nvalue(DifferentVehicles, Vs),
+	cumulatives(Tasks, Machines, [bound(upper)]),
+	labeling([minimize(DifferentVehicles)], Vs).
