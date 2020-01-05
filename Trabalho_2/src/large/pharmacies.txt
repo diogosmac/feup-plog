@@ -7,3 +7,4 @@ pharmacy(7, 10, 15, 55).
 pharmacy(8, 14, 20, 35).
 pharmacy(9, 18, 20, 50).
 pharmacy(10, 12, 14, 55).
+pharmacy(11, 12, 17, 50).

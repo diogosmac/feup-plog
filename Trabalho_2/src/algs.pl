@@ -41,7 +41,8 @@ constrain_dists([Array | DistancesList], [Local | Rest], [NewCost | CostList]) :
 
 % variables:
 % - array of successors [sc, s2, s3, ..., si] - pharmacy/delivery done after i (c is central)
-% - array of start times [tc, t2, t3, ..., ti] - time at which the service begins in pharmacy i (central appears twice)
+% - array of start times [tc, t2, t3, ..., ti] - time at which the service begins in pharmacy i
+% 												 (central appears twice)
 % - total distance/time spent on travels (variable to be minimized)
 
 % inputs:
@@ -79,13 +80,15 @@ generate_constraints([Array | DistancesMatrix], Counter, StartTimesList, [Local 
     if_then_else((Counter is 1), 
                  (Time + NewCost #=< StartTimeDestination),
                  (Time + NewCost + 30 #=< StartTimeDestination)),
-    % when we leave the central (counter = 1), there is no delivery so we don't need to add the extra half an hour.
+    % when we leave the central (counter = 1), there is no delivery,
+	% 	   so we don't need to add the extra half hour.
     % on every other local, we add 0.5 hours to simulate the delivery, which takes that time to be made.
 
     (Local #= 1 #/\ TimeLocal #= NumTimes)
     #\/
     (Local #\= 1 #/\ TimeLocal #= Local),
-    % if we are restraining the start time of the arrival to the central, restrain the last variable of the list instead of the first,
+    % if we are restraining the start time of the arrival to the central,
+	% 		restrain the last variable of the list instead of the first,
     % because the first refers to when we leave the central for the first time (always 10 AM)
     element(TimeLocal, StartTimesList, StartTimeDestination),
 
@@ -102,7 +105,8 @@ putTimeDomainAux([LastTime], _, _) :-
 putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
     member((Count-Start-End-_), PharmaciesList),
     StartMinutes is floor(Start * 60),
-    EndMinutesWithDelivery is floor(End * 60) - 30, % removing half an hour to the end of the domain, to make time for the delivery (30 minutes)
+    EndMinutesWithDelivery is floor(End * 60) - 30, % removing half an hour to the end of the domain,
+													% 		   to make time for the delivery (30 minutes)
     Time in StartMinutes .. EndMinutesWithDelivery, % domain of the start time
     NewCount is Count + 1,
     putTimeDomainAux(Rest, NewCount, PharmaciesList).
@@ -156,8 +160,7 @@ part3([First | Rest], TruckCapacityList, NumOfTrucks, PharmaciesList, OrderList,
 
 
     reset_timer,
-    % labeling([minimize(TimeCost)], AllVars), % solves, trying to minimize time/distance
-    labeling([minimize(Cost), min], AllVars), % solves, trying to minimize time/distance and number of vehicles used    
+    labeling([minimize(Cost), ff, bisect], AllVars), % solves, trying to minimize time/distance and number of vehicles used    
     print_time,
 
     fd_statistics.
@@ -218,8 +221,8 @@ putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
 
 
 % ---------------------------------------
-% ATTEMPT OF IMPLEMENTATION OF THE THEORETICAL MODEL BUILT FOR THE RESOLUTION OF THE PROBLEM:
-% VEHICLE ROUTING PROBLEM WITH TIME WINDOWS
+% % ATTEMPT OF IMPLEMENTATION OF THE THEORETICAL MODEL BUILT FOR THE RESOLUTION OF THE PROBLEM:
+% % VEHICLE ROUTING PROBLEM WITH TIME WINDOWS
 
 % vrpTW(TruckCapacity, NumOfTrucks, PharmaciesList, [FirstDistances | Rest],
 % 		PredecessorsList, SuccessorsList, PharmacyVehiclesList, 
@@ -269,7 +272,7 @@ putTimeDomainAux([Time | Rest], Count, PharmaciesList) :-
 	
 % 	Vars = [PredecessorsList, SuccessorsList, PharmacyVehiclesList, StartTimesList, CapacitiesList],
 % 	append(Vars, Sol),
-% 	labeling([minimize(Cost)], Sol).
+% 	labeling([minimize(Cost), ff, bisect], Sol).
 
 
 % predecessorsDomain([Head | PredecessorsList], NumLocals) :-
