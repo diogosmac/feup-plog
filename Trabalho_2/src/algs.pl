@@ -156,8 +156,8 @@ part3([First | Rest], TruckCapacityList, NumOfTrucks, PharmaciesList, OrderList,
 
 
     reset_timer,
-    labeling([minimize(TimeCost)], AllVars), % solves, trying to minimize time/distance
-    % labeling([minimize(Cost)], AllVars), % solves, trying to minimize time/distance and number of vehicles used    
+    % labeling([minimize(TimeCost)], AllVars), % solves, trying to minimize time/distance
+    labeling([minimize(Cost), min], AllVars), % solves, trying to minimize time/distance and number of vehicles used    
     print_time,
 
     fd_statistics.

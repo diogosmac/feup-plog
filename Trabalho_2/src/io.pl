@@ -86,35 +86,35 @@ print_start_times_aux([Minutes | StartTimesList]) :-
 % --------------------------------------
 % predicates that print, in a readable format, all the output from the main program
 print_output_short(OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles) :-
-    write('Output resumed: '), nl, nl,
-    write('Visits pharmacies by order '), write(OrderList), nl,
-    write('The start times are '), print_start_times(StartTimesList), nl,
-	write('Spends a total of '), write(TimeCost), write(' minutes in trips'), nl,
-	write('The vehicles assigned to each delivery are '), write(DeliveriesList), nl,
-    write(DifferentVehicles), write(' different vehicles were used'), nl, nl.
+    write('Output resumed: '), nl,
+    write('- Visits pharmacies by order '), write(OrderList), nl,
+    write('- The start times are '), print_start_times(StartTimesList), nl,
+	write('- Spends a total of '), write(TimeCost), write(' minutes in trips'), nl,
+	write('- The vehicles assigned to each delivery are '), write(DeliveriesList), nl,
+    write('- '), write(DifferentVehicles), write(' different vehicles were used'), nl, nl.
 
 
 print_output(OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles) :-
-    nl, write('----------------------'), nl, nl,
+    write('----------------------'), nl,
     write('Total time spent on trips: '), write(TimeCost), write(' minutes'), nl,
-    write(DifferentVehicles), write(' different vehicles were used'), nl, nl,
+    write(DifferentVehicles), write(' different vehicles were used'), nl,
     print_output_lists(OrderList, StartTimesList, DeliveriesList),
-    nl, nl, write('----------------------'), nl, nl,
+    nl, write('----------------------'), nl,
     print_output_short(OrderList, StartTimesList, DeliveriesList, TimeCost, DifferentVehicles).
 
 print_output_lists([First | OrderList], [FirstTime | StartTimesList], DeliveriesList) :-
-    write('Leaving the central (local 1), at time '), write_minutes(FirstTime), write('; leaving for local '), write(First), nl, nl,
-    write('-----'), nl, nl,
+    write('Leaving the central (local 1), at time '), write_minutes(FirstTime), write('; leaving for local '), write(First), nl,
+    write('-----'), nl,
     print_output_lists_aux(OrderList, StartTimesList, DeliveriesList, 2).
 
 print_output_lists_aux([], [LastTime], [], _) :-
     write('Arriving at central at time '), write_minutes(LastTime).
 
 print_output_lists_aux([NextLocal | OrderList], [StartTime | StartTimesList], [Vehicle | DeliveriesList], Counter) :-
-    write('Pharmacy '), write(Counter), write(':'), nl, nl,
-    write('Delivery starts at '), write_minutes(StartTime), nl,
-    write('Delivery done by vehicle '), write(Vehicle), nl,
-    write('Next local in route is '), write(NextLocal), nl, nl,
-    write('-----'), nl, nl,
+    write('- Pharmacy '), write(Counter), write(':'), nl,
+    write('- Delivery starts at '), write_minutes(StartTime), nl,
+    write('- Delivery done by vehicle '), write(Vehicle), nl,
+    write('- Next local in route is '), write(NextLocal), nl,
+    write('-----'), nl,
     NewCounter is Counter + 1,
     print_output_lists_aux(OrderList, StartTimesList, DeliveriesList, NewCounter).
