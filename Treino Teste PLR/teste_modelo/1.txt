@@ -1,0 +1,28 @@
+O programa apresentado utiliza uma estratégia
+de Generate and Test de modo a verificar
+uma certa condição na lista L2.
+O programa recebe a lista L1. Primeiro chama
+o predicado gen/2 que, utilizando o predicado
+select/3 várias vezes, retorna uma lista L2,
+contendo os mesmos elementos de L1 mas numa
+ordem qualquer (se o predicado test/1 falhar,
+é feito backtrack para o predicado gen/2,
+que gerará uma nova ordem para os elementos,
+se possível).
+De seguida o predicado test/1 é chamado,
+que apenas passará se para cada elemento da
+lista, excluíndo o primeiro e o último,
+ele não é o maior nem o menor que os elementos
+diretamente à sua esquerda e direita (ou seja,
+tem de ser o elemento do "meio", em termos
+de valores).
+
+Relativamente à eficiência do programa, não será
+à melhor, uma vez que como foi referido, este
+utiliza uma estratégia de Generate&Test para
+verificar uma dada condição, o que levará
+provavelmente a um grande número de backtracks,
+e o tempo e memória gastos pelo programa será
+elevado. Seria mais vantajoso utilizar uma
+abordagem com restrições, do género
+Constrain&Generate.

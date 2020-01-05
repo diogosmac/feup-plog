@@ -1,0 +1,9 @@
+As variáveis de decisão que se podem usar são: 2 listas, uma lista com comprimento igual ao numero de objetos, que tera dominio
+igual a um intervalo de 1 ao numero total de compartimentos, e que ira representar em que compartimento é que o objeto de indice i
+ficou. Para chegar a esse resultado, usa-se lista auxiliar, de modo a acumular valores e a implementar restrições,
+que é uma lista com comprimento igual ao numero de compartimentos, que representará a soma de pesos dos objetos nesse compartimento,
+sendo que cada elemento tera como dominio um intervalo entre 0 e a soma dos pesos de todos os objetos (valor maximo do peso de um
+compartimento).
+
+O plano sera utilizar o predicado cumulatives de modo a implementar as restricoes ligadas ao volume dos objetos, e depois implementar
+"manualmente" com mais algumas restricoes adicionais o facto de um compartimento nao poder pesar mais que o compartimento de baixo.
