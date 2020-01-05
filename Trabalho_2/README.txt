@@ -1,0 +1,2 @@
+Para correr o programa, deve ser compilado o ficheiro "main.pl" dentro da pasta "src", e depois deve ser corrido o predicado "main.", com o SICStus Prolog.
+O conjunto de ficheiros a utilizar (small, medium, large) é definido no predicado main.
