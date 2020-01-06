@@ -1,0 +1,11 @@
+As variáveis de decisão que irei utilizar serão duas listas, uma representando os tempos de inicio das tarefas
+e outra representando os tempos finais. O elemento i de uma lista irá representar o start/end time da movimentação do objeto i,
+sendo que o objeto i será o i-ésimo objeto a ser lido dos inputs.
+As variáveis teram como domínio um intervalo de 0 a MAX_TIME, sendo que MAX_TIME é o tempo limite de conclusão das tarefas, que
+também é passado como input.
+
+O problema irá ser modelado com base no predicado cumulative, que permite o escalonamento/scheduling de tarefas com base nos
+seus start/end times e com base na quantidade de recursos de que necessitam (neste caso os recursos irão ser os homens necessários
+para deslocar cada objeto). Depois, adicionar algumas restrições adicionais de modo a impedir que a última tarefa a acabar acabe depois
+do MAX_TIME. Por fim, ao fazer a chamada ao labeling, minimizar o tempo final da última tarefa, de modo a que o deslocamento de
+todos os objetos acabem o mais cedo possível.

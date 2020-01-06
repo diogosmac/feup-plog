@@ -28,7 +28,6 @@ prat(Prateleiras, Objetos, Vars) :-
     labeling([], AllVars).
 
 
-
 constrain_pesos(_, _, ColumnCounter, Columns) :- ColumnCounter > Columns, !.
 constrain_pesos(SumPesosPrats, NumRows, ColumnCounter, NumColumns) :-
     constrain_pesos_aux(SumPesosPrats, NumRows, NumRows, ColumnCounter, NumColumns),
