@@ -2,7 +2,7 @@
 
 > **2019/2020** - 3rd Year, 1st Semester
 >
-> **Course:** Programação em Lógica ([PLOG](https://sigarra.up.pt/feup/pt/ucurr_geral.ficha_uc_view?pv_ocorrencia_id=436446)) | Logic Programming
+> **Course:** Programação em Lógica ([PLOG](https://sigarra.up.pt/feup/pt/ucurr_geral.ficha_uc_view?pv_ocorrencia_id=4364446)) | Logic Programming
 >
 > **Projects developed by:** Diogo Machado ([diogosmac](https://github.com/diogosmac)) and Eduardo Ribeiro ([EduRibeiro00](https://github.com/EduRibeiro00))
 >
